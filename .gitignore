@@ -1,5 +1,5 @@
-# Ignorar todos os diretórios __pycache__
-**/__pycache__/
+# Ignorar todos os __pycache__ dentro de EXAME CSI-28
+EXAME CSI-28/**/__pycache__/
 
-# Ignorar o arquivo .env
-Exame/.env
+# Ignorar o arquivo .env dentro de EXAME CSI-28
+EXAME CSI-28/.env
