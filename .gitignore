@@ -1,5 +1,5 @@
-# Ignorar a pasta __pycache__ em qualquer diretório
-__pycache__/
+# Ignorar todos os __pycache__ dentro da pasta Exame
+Exame/**/__pycache__/
 
-# Ignorar o arquivo .env
-.env
+# Ignorar o arquivo .env dentro da pasta Exame
+Exame/.env
