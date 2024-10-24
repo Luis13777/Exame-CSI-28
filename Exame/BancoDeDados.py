@@ -1,11 +1,16 @@
 import pyodbc
 import pandas as pd
+from dotenv import load_dotenv
+import os
 
 def conectar_ao_sql_server():
-    # Configurações do seu servidor SQL Express
-    server = 'LUIS\\SQLEXPRESS'  # Nome do servidor que você usou na conexão
-    database = 'Financias'  # Nome do banco de dados que você criou
-    # A string de conexão para autenticação do Windows (sem necessidade de usuário/senha)
+    # Carregar as variáveis do arquivo .env
+    load_dotenv()
+
+    # Obter os valores das variáveis de ambiente
+    server = os.getenv('SERVER_NAME')
+    database = os.getenv('DATABASE_NAME')
+    
     conn_str = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
 
     try:
