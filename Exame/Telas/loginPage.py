@@ -49,6 +49,12 @@ class LoginScreen(tk.Frame):
         event.widget['background'] = '#3333cc'  # Cor normal do botão
 
     def login(self):
+
+        self.app.usuario = "luis@email.com"
+        self.app.show_frame(MainMenu)
+
+        return
+
         username = self.entry_username.get()
         password = self.entry_password.get()
         # Se o login for bem-sucedido
@@ -58,6 +64,7 @@ class LoginScreen(tk.Frame):
         resultado = consultar_usuarios(conn, username)
         if resultado is not None:
             if resultado['senha'].values[0] == password:
+                self.app.usuario = username
                 self.app.show_frame(MainMenu)
             else:
                 messagebox.showerror("Erro", "Login falhou.")

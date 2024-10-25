@@ -10,6 +10,7 @@ class App:
         # Iniciar com a tela de login
         self.current_frame = None
         self.show_frame(LoginScreen)
+        self.usuario = None
     
     def show_frame(self, frame_class):
         """Troca as telas."""
