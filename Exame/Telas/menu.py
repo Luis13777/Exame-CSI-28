@@ -12,6 +12,8 @@ class MainMenu(tk.Frame):
         self.conn = conectar_ao_sql_server()
 
         # Layout principal
+        
+        app.root.geometry("900x700")
         self.config(bg="#ffffff")
         self.pack(fill="both", expand=True)
 
@@ -126,7 +128,6 @@ class MainMenu(tk.Frame):
         cursor.close()
         return usuario_id
 
-
     def adicionar_gasto(self):
         # Criar uma nova janela
         self.add_window = tk.Toplevel(self)
@@ -192,6 +193,7 @@ class MainMenu(tk.Frame):
         self.edit_window.transient(self)
         self.edit_window.grab_set()
 
+
         # Centralizar a janela na tela
         self.edit_window.update_idletasks()
         largura_janela, altura_janela = 500, 400
@@ -213,11 +215,10 @@ class MainMenu(tk.Frame):
         entry_data_final = tk.Entry(frame_filtro, width=12)
         entry_data_final.grid(row=0, column=3)
 
-        # Função para carregar gastos no período especificado
         def carregar_gastos():
             data_inicial = entry_data_inicial.get()
             data_final = entry_data_final.get()
-            
+
             # Consulta ao banco com filtro de data
             query = ("SELECT id, categoria, valor, data FROM gastos "
                     "WHERE usuario_id = (SELECT id FROM usuarios WHERE email = ?) "
@@ -227,23 +228,70 @@ class MainMenu(tk.Frame):
             resultados = cursor.fetchall()
             cursor.close()
 
-            # Limpa tabela antes de recarregar
+            # Limpa a tabela antes de recarregar
             for widget in frame_tabela.winfo_children():
                 widget.destroy()
 
+            # Configura cada coluna da frame_tabela para expandir com a janela
+            frame_tabela.grid_columnconfigure(0, weight=2)  # Coluna Descrição
+            frame_tabela.grid_columnconfigure(1, weight=1)  # Coluna Valor
+            frame_tabela.grid_columnconfigure(2, weight=1)  # Coluna Data
+            frame_tabela.grid_columnconfigure(3, weight=1)  # Coluna Editar
+            frame_tabela.grid_columnconfigure(4, weight=1)  # Coluna Remover
+
             # Exibir dados em tabela com botões de ação
             for i, (gasto_id, descricao, valor, data) in enumerate(resultados):
-                tk.Label(frame_tabela, text=descricao, bg="#ffffff", width=20).grid(row=i, column=0, padx=5, pady=5)
-                tk.Label(frame_tabela, text=f"R${valor:.2f}", bg="#ffffff", width=10).grid(row=i, column=1, padx=5)
-                tk.Label(frame_tabela, text=data, bg="#ffffff", width=12).grid(row=i, column=2, padx=5)
+                # Exibe a descrição do gasto
+                tk.Label(frame_tabela, text=descricao, bg="#ffffff", width=20, anchor="w").grid(row=i, column=0, padx=5, pady=5, sticky="ew")
+                
+                # Exibe o valor do gasto
+                tk.Label(frame_tabela, text=f"R${valor:.2f}", bg="#ffffff", width=10, anchor="center").grid(row=i, column=1, padx=5, pady=5, sticky="ew")
+                
+                # Exibe a data do gasto
+                tk.Label(frame_tabela, text=data, bg="#ffffff", width=12, anchor="center").grid(row=i, column=2, padx=5, pady=5, sticky="ew")
 
                 # Botão para editar gasto
-                btn_editar = tk.Button(frame_tabela, text="Editar", command=lambda g_id=gasto_id: editar_gasto(g_id), bg="#4CAF50", fg="white", width=8)
-                btn_editar.grid(row=i, column=3, padx=5)
+                btn_editar = tk.Button(frame_tabela, text="Editar", command=lambda g_id=gasto_id: editar_gasto(g_id),
+                                    bg="#4CAF50", fg="white", width=8)
+                btn_editar.grid(row=i, column=3, padx=5, pady=5, sticky="ew")
 
                 # Botão para remover gasto
-                btn_remover = tk.Button(frame_tabela, text="Remover", command=lambda g_id=gasto_id: remover_gasto(g_id), bg="#D9534F", fg="white", width=8)
-                btn_remover.grid(row=i, column=4, padx=5)
+                btn_remover = tk.Button(frame_tabela, text="Remover", command=lambda g_id=gasto_id: remover_gasto(g_id),
+                                        bg="#D9534F", fg="white", width=8)
+                btn_remover.grid(row=i, column=4, padx=5, pady=5, sticky="ew")
+
+
+        # # Função para carregar gastos no período especificado
+        # def carregar_gastos():
+        #     data_inicial = entry_data_inicial.get()
+        #     data_final = entry_data_final.get()
+            
+        #     # Consulta ao banco com filtro de data
+        #     query = ("SELECT id, categoria, valor, data FROM gastos "
+        #             "WHERE usuario_id = (SELECT id FROM usuarios WHERE email = ?) "
+        #             "AND data BETWEEN ? AND ?")
+        #     cursor = self.conn.cursor()
+        #     cursor.execute(query, (self.app.usuario, data_inicial, data_final))
+        #     resultados = cursor.fetchall()
+        #     cursor.close()
+
+        #     # Limpa tabela antes de recarregar
+        #     for widget in frame_tabela.winfo_children():
+        #         widget.destroy()
+
+        #     # Exibir dados em tabela com botões de ação
+        #     for i, (gasto_id, descricao, valor, data) in enumerate(resultados):
+        #         tk.Label(frame_tabela, text=descricao, bg="#ffffff", width=20).grid(row=i, column=0, padx=5, pady=5)
+        #         tk.Label(frame_tabela, text=f"R${valor:.2f}", bg="#ffffff", width=10).grid(row=i, column=1, padx=5)
+        #         tk.Label(frame_tabela, text=data, bg="#ffffff", width=12).grid(row=i, column=2, padx=5)
+
+        #         # Botão para editar gasto
+        #         btn_editar = tk.Button(frame_tabela, text="Editar", command=lambda g_id=gasto_id: editar_gasto(g_id), bg="#4CAF50", fg="white", width=8)
+        #         btn_editar.grid(row=i, column=3, padx=5)
+
+        #         # Botão para remover gasto
+        #         btn_remover = tk.Button(frame_tabela, text="Remover", command=lambda g_id=gasto_id: remover_gasto(g_id), bg="#D9534F", fg="white", width=8)
+        #         btn_remover.grid(row=i, column=4, padx=5)
 
         # Botão para filtrar
         btn_filtrar = tk.Button(self.edit_window, text="Filtrar", command=carregar_gastos, bg="#4CAF50", fg="white", font=("Arial", 12))
@@ -260,7 +308,7 @@ class MainMenu(tk.Frame):
                 novo_valor = entry_editar_valor.get()
                 try:
                     cursor = self.conn.cursor()
-                    cursor.execute("UPDATE gastos SET descricao = ?, valor = ? WHERE id = ?", (nova_descricao, float(novo_valor), gasto_id))
+                    cursor.execute("UPDATE gastos SET categoria = ?, valor = ? WHERE id = ?", (nova_descricao, float(novo_valor), gasto_id))
                     self.conn.commit()
                     cursor.close()
                     carregar_gastos()
@@ -295,7 +343,6 @@ class MainMenu(tk.Frame):
                 carregar_gastos()
             except Exception as e:
                 print(f"Erro ao remover gasto: {e}")
-
 
     def remover_gasto(self):
         print("Função de remover gasto chamada")
