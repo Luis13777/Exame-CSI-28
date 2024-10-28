@@ -22,11 +22,11 @@ def conectar_ao_sql_server():
         print(f"Erro ao conectar ao SQL Server: {e}")
         return None
 
-def adicionar_usuario(conn, nome, email, senha, periodo_relatorio):
+def adicionar_usuario(conn, nome, email, senha):
     cursor = conn.cursor()
     try:
-        cursor.execute('''INSERT INTO usuarios (nome, email, senha, periodo_relatorio)
-                          VALUES (?, ?, ?, ?)''', (nome, email, senha, periodo_relatorio))
+        cursor.execute('''INSERT INTO usuarios (nome, email, senha)
+                          VALUES (?, ?, ?)''', (nome, email, senha))
         conn.commit()
         print("Usuário adicionado com sucesso!")
     except Exception as e:
@@ -61,7 +61,7 @@ def editar_usuario(conn, usuario_id, nome=None, email=None, senha=None, periodo_
         params.append(periodo_relatorio)
     
     params.append(usuario_id)
-    query = f"UPDATE usuarios SET {', '.join(updates)} WHERE id = ?"
+    query = f"UPDATE usuarios SET {', '.join(updates)} WHERE usuario_id = ?"
     
     try:
         cursor.execute(query, params)
@@ -86,7 +86,7 @@ def editar_gasto(conn, gasto_id, categoria=None, valor=None, data=None):
         params.append(data)
     
     params.append(gasto_id)
-    query = f"UPDATE gastos SET {', '.join(updates)} WHERE id = ?"
+    query = f"UPDATE gastos SET {', '.join(updates)} WHERE id_gasto = ?"
     
     try:
         cursor.execute(query, params)
@@ -98,7 +98,7 @@ def editar_gasto(conn, gasto_id, categoria=None, valor=None, data=None):
 def remover_usuario(conn, usuario_id):
     cursor = conn.cursor()
     try:
-        cursor.execute("DELETE FROM usuarios WHERE id = ?", (usuario_id,))
+        cursor.execute("DELETE FROM usuarios WHERE usuario_id = ?", (usuario_id,))
         conn.commit()
         print("Usuário removido com sucesso!")
     except Exception as e:
@@ -107,7 +107,7 @@ def remover_usuario(conn, usuario_id):
 def remover_gasto(conn, gasto_id):
     cursor = conn.cursor()
     try:
-        cursor.execute("DELETE FROM gastos WHERE id = ?", (gasto_id,))
+        cursor.execute("DELETE FROM gastos WHERE id_gasto = ?", (gasto_id,))
         conn.commit()
         print("Gasto removido com sucesso!")
     except Exception as e:

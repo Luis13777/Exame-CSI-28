@@ -10,6 +10,9 @@ class MainMenu(tk.Frame):
         tk.Frame.__init__(self, app.root)
         self.app = app
         self.conn = conectar_ao_sql_server()
+        
+        # Inicializa o canvas do gráfico como None
+        self.canvas_widget = None
 
         # Layout principal
         
@@ -21,8 +24,19 @@ class MainMenu(tk.Frame):
         label_title = tk.Label(self, text=f"Bem vindo {self.get_usuario_id()}", font=("Arial", 24, "bold"), bg="#ffffff")
         label_title.pack(pady=20)
 
-        # Gráfico de gastos
-        self.create_gasto_chart()
+
+        # Frame para os botões de opções
+        self.options_frame = tk.Frame(self, bg="#ffffff")
+        self.options_frame.pack(fill="both", expand=True)
+
+        # Botão para voltar, inicialmente oculto
+        self.back_button = tk.Button(self, text="←", font=("Arial", 20), bg="#333333", fg="white",
+                                     command=self.show_main_menu)
+
+        self.back_button.place_forget()  # Oculta inicialmente
+
+        # Botões de opções
+        self.create_option_buttons()
 
         # Variável de controle para o estado do menu lateral
         self.menu_open = False
@@ -38,10 +52,6 @@ class MainMenu(tk.Frame):
         # Adicionar botões no menu lateral com mais espaçamento
         self.btn_add = tk.Button(self.box_de_botoes, text="Adicionar Gastos", command=self.adicionar_gasto,
                                  bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
-        # self.btn_edit = tk.Button(self.box_de_botoes, text="Editar Gastos", command=self.editar_gasto,
-        #                           bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
-        # self.btn_remove = tk.Button(self.box_de_botoes, text="Remover Gastos", command=self.remover_gasto,
-        #                             bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
         
         self.btn_edit_remove = tk.Button(self.box_de_botoes, text="Editar Gastos", command=self.editar_remover_gasto,
                                     bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
@@ -55,6 +65,46 @@ class MainMenu(tk.Frame):
         self.toggle_btn = tk.Button(self, text="☰", command=self.toggle_sidebar,
                                     bg="#333", fg="white", padx=10, pady=5, font=("Arial", 16))
         self.toggle_btn.place(x=10, y=10)
+
+    def create_option_buttons(self):
+        # Função para criar e organizar os botões de opções na tela principal
+        btn_consultar = tk.Button(self.options_frame, text="Consultar Gastos", command=self.show_chart,
+                                  bg="#4CAF50", fg="white", font=("Arial", 14))
+        btn_opcao2 = tk.Button(self.options_frame, text="Opção 2", command=self.show_chart,
+                               bg="#4CAF50", fg="white", font=("Arial", 14))
+        btn_opcao3 = tk.Button(self.options_frame, text="Opção 3", command=self.show_chart,
+                               bg="#4CAF50", fg="white", font=("Arial", 14))
+        btn_opcao4 = tk.Button(self.options_frame, text="Opção 4", command=self.show_chart,
+                               bg="#4CAF50", fg="white", font=("Arial", 14))
+
+        # Usando grid para que os botões ocupem o espaço disponível
+        self.options_frame.grid_rowconfigure(0, weight=1)
+        self.options_frame.grid_rowconfigure(1, weight=1)
+        self.options_frame.grid_columnconfigure(0, weight=1)
+        self.options_frame.grid_columnconfigure(1, weight=1)
+
+        # Posiciona os botões na grid
+        btn_consultar.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
+        btn_opcao2.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
+        btn_opcao3.grid(row=1, column=0, sticky="nsew", padx=20, pady=20)
+        btn_opcao4.grid(row=1, column=1, sticky="nsew", padx=20, pady=20)
+
+    def show_chart(self):
+        # Oculta os botões e exibe o botão de voltar
+        self.options_frame.pack_forget()
+
+        self.back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
+        self.create_gasto_chart()
+
+    def show_main_menu(self):
+    # Remove o gráfico se ele estiver presente
+        if self.canvas_widget:
+            self.canvas_widget.destroy()
+            self.canvas_widget = None
+
+        # Remove o conteúdo alternativo e exibe os botões de opções novamente
+        self.back_button.place_forget()  # Oculta o botão de voltar
+        self.options_frame.pack(fill="both", expand=True)  # Exibe os botões de opções  
 
     def toggle_sidebar(self):
         if self.menu_open:
@@ -85,6 +135,8 @@ class MainMenu(tk.Frame):
             # Desenha o gráfico
             canvas = FigureCanvasTkAgg(fig, master=self)
             canvas_widget = canvas.get_tk_widget()
+            self.canvas_widget = canvas.get_tk_widget()  # Armazena a referência do canvas
+
 
             # Obtém a altura do frame que contém o gráfico (após layout ser atualizado)
             frame_height = self.winfo_height()
@@ -105,7 +157,7 @@ class MainMenu(tk.Frame):
     def fetch_gastos_data(self):
         """Busca os dados de gastos do usuário logado"""
         email_usuario = self.app.usuario
-        query = f"SELECT g.categoria, g.valor, g.data FROM usuarios u JOIN gastos g ON u.id = g.usuario_id WHERE u.email = '{email_usuario}'"
+        query = f"SELECT g.categoria, g.valor, g.data FROM usuarios u JOIN gastos g ON u.usuario_id = g.usuario_id WHERE u.email = '{email_usuario}'"
         cursor = self.conn.cursor()
         cursor.execute(query)
 
@@ -172,7 +224,7 @@ class MainMenu(tk.Frame):
                 cursor = self.conn.cursor()
                 email_usuario = self.app.usuario
                 cursor.execute(f"INSERT INTO gastos (usuario_id, categoria, valor, data) "
-                            f"VALUES ((SELECT id FROM usuarios WHERE email='{email_usuario}'), ?, ?, ?)",
+                            f"VALUES ((SELECT usuario_id FROM usuarios WHERE email='{email_usuario}'), ?, ?, ?)",
                             (descricao, float(valor), data_atual))  # Usa a data atual
                 self.conn.commit()
                 cursor.close()
@@ -221,7 +273,7 @@ class MainMenu(tk.Frame):
 
             # Consulta ao banco com filtro de data
             query = ("SELECT id, categoria, valor, data FROM gastos "
-                    "WHERE usuario_id = (SELECT id FROM usuarios WHERE email = ?) "
+                    "WHERE usuario_id = (SELECT usuario_id FROM usuarios WHERE email = ?) "
                     "AND data BETWEEN ? AND ?")
             cursor = self.conn.cursor()
             cursor.execute(query, (self.app.usuario, data_inicial, data_final))
@@ -308,7 +360,7 @@ class MainMenu(tk.Frame):
                 novo_valor = entry_editar_valor.get()
                 try:
                     cursor = self.conn.cursor()
-                    cursor.execute("UPDATE gastos SET categoria = ?, valor = ? WHERE id = ?", (nova_descricao, float(novo_valor), gasto_id))
+                    cursor.execute("UPDATE gastos SET categoria = ?, valor = ? WHERE id_gasto = ?", (nova_descricao, float(novo_valor), gasto_id))
                     self.conn.commit()
                     cursor.close()
                     carregar_gastos()
@@ -337,15 +389,9 @@ class MainMenu(tk.Frame):
         def remover_gasto(gasto_id):
             try:
                 cursor = self.conn.cursor()
-                cursor.execute("DELETE FROM gastos WHERE id = ?", (gasto_id,))
+                cursor.execute("DELETE FROM gastos WHERE id_gasto = ?", (gasto_id,))
                 self.conn.commit()
                 cursor.close()
                 carregar_gastos()
             except Exception as e:
                 print(f"Erro ao remover gasto: {e}")
-
-    def remover_gasto(self):
-        print("Função de remover gasto chamada")
-
-    def editar_gasto(self):
-        print("Função de editar gasto chamada")
