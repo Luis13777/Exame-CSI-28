@@ -23,6 +23,7 @@ class MainMenu(tk.Frame):
         # Título
         label_title = tk.Label(self, text=f"Bem vindo {self.get_usuario_id()}", font=("Arial", 24, "bold"), bg="#ffffff")
         label_title.pack(pady=20)
+        self.label_title = label_title
 
 
         # Frame para os botões de opções
@@ -58,8 +59,6 @@ class MainMenu(tk.Frame):
 
         self.btn_add.pack(fill="x", pady=10, padx=20)
         self.btn_edit_remove.pack(fill="x", pady=10, padx=20)
-        # self.btn_edit.pack(fill="x", pady=10, padx=20)
-        # self.btn_remove.pack(fill="x", pady=10, padx=20)
 
         # Botão que alterna o menu lateral
         self.toggle_btn = tk.Button(self, text="☰", command=self.toggle_sidebar,
@@ -67,15 +66,34 @@ class MainMenu(tk.Frame):
         self.toggle_btn.place(x=10, y=10)
 
     def create_option_buttons(self):
-        # Função para criar e organizar os botões de opções na tela principal
+        # Função auxiliar para aplicar o efeito de hover nos botões
+        def apply_hover_effect(button):
+            def on_enter(e):
+                button['background'] = '#6666ff'  # cor ao passar o mouse
+                button['foreground'] = 'white'
+
+            def on_leave(e):
+                button['background'] = '#3333cc'  # cor padrão
+                button['foreground'] = 'white'
+
+            button.bind("<Enter>", on_enter)
+            button.bind("<Leave>", on_leave)
+
+        # Criação dos botões com o estilo moderno
         btn_consultar = tk.Button(self.options_frame, text="Consultar Gastos", command=self.show_chart,
-                                  bg="#4CAF50", fg="white", font=("Arial", 14))
+                                bg="#3333cc", fg="white", font=("Arial", 14, "bold"), bd=0, padx=20, pady=10, width=20)
         btn_opcao2 = tk.Button(self.options_frame, text="Opção 2", command=self.show_chart,
-                               bg="#4CAF50", fg="white", font=("Arial", 14))
+                            bg="#3333cc", fg="white", font=("Arial", 14, "bold"), bd=0, padx=20, pady=10, width=20)
         btn_opcao3 = tk.Button(self.options_frame, text="Opção 3", command=self.show_chart,
-                               bg="#4CAF50", fg="white", font=("Arial", 14))
+                            bg="#3333cc", fg="white", font=("Arial", 14, "bold"), bd=0, padx=20, pady=10, width=20)
         btn_opcao4 = tk.Button(self.options_frame, text="Opção 4", command=self.show_chart,
-                               bg="#4CAF50", fg="white", font=("Arial", 14))
+                            bg="#3333cc", fg="white", font=("Arial", 14, "bold"), bd=0, padx=20, pady=10, width=20)
+
+        # Aplicando o efeito de hover para cada botão
+        apply_hover_effect(btn_consultar)
+        apply_hover_effect(btn_opcao2)
+        apply_hover_effect(btn_opcao3)
+        apply_hover_effect(btn_opcao4)
 
         # Usando grid para que os botões ocupem o espaço disponível
         self.options_frame.grid_rowconfigure(0, weight=1)
@@ -89,9 +107,14 @@ class MainMenu(tk.Frame):
         btn_opcao3.grid(row=1, column=0, sticky="nsew", padx=20, pady=20)
         btn_opcao4.grid(row=1, column=1, sticky="nsew", padx=20, pady=20)
 
+
     def show_chart(self):
+        if self.menu_open:
+            self.toggle_sidebar()  # Fecha o menu lateral se estiver aberto
+
         # Oculta os botões e exibe o botão de voltar
         self.options_frame.pack_forget()
+        self.label_title.pack_forget()
 
         self.back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
         self.create_gasto_chart()
@@ -104,7 +127,8 @@ class MainMenu(tk.Frame):
 
         # Remove o conteúdo alternativo e exibe os botões de opções novamente
         self.back_button.place_forget()  # Oculta o botão de voltar
-        self.options_frame.pack(fill="both", expand=True)  # Exibe os botões de opções  
+        self.label_title.pack(pady=20)  # Exibe o título
+        self.options_frame.pack(fill="both", expand=True)  # Exibe os botões de opções
 
     def toggle_sidebar(self):
         if self.menu_open:
@@ -272,7 +296,7 @@ class MainMenu(tk.Frame):
             data_final = entry_data_final.get()
 
             # Consulta ao banco com filtro de data
-            query = ("SELECT id, categoria, valor, data FROM gastos "
+            query = ("SELECT id_gasto, categoria, valor, data FROM gastos "
                     "WHERE usuario_id = (SELECT usuario_id FROM usuarios WHERE email = ?) "
                     "AND data BETWEEN ? AND ?")
             cursor = self.conn.cursor()
@@ -313,38 +337,6 @@ class MainMenu(tk.Frame):
                 btn_remover.grid(row=i, column=4, padx=5, pady=5, sticky="ew")
 
 
-        # # Função para carregar gastos no período especificado
-        # def carregar_gastos():
-        #     data_inicial = entry_data_inicial.get()
-        #     data_final = entry_data_final.get()
-            
-        #     # Consulta ao banco com filtro de data
-        #     query = ("SELECT id, categoria, valor, data FROM gastos "
-        #             "WHERE usuario_id = (SELECT id FROM usuarios WHERE email = ?) "
-        #             "AND data BETWEEN ? AND ?")
-        #     cursor = self.conn.cursor()
-        #     cursor.execute(query, (self.app.usuario, data_inicial, data_final))
-        #     resultados = cursor.fetchall()
-        #     cursor.close()
-
-        #     # Limpa tabela antes de recarregar
-        #     for widget in frame_tabela.winfo_children():
-        #         widget.destroy()
-
-        #     # Exibir dados em tabela com botões de ação
-        #     for i, (gasto_id, descricao, valor, data) in enumerate(resultados):
-        #         tk.Label(frame_tabela, text=descricao, bg="#ffffff", width=20).grid(row=i, column=0, padx=5, pady=5)
-        #         tk.Label(frame_tabela, text=f"R${valor:.2f}", bg="#ffffff", width=10).grid(row=i, column=1, padx=5)
-        #         tk.Label(frame_tabela, text=data, bg="#ffffff", width=12).grid(row=i, column=2, padx=5)
-
-        #         # Botão para editar gasto
-        #         btn_editar = tk.Button(frame_tabela, text="Editar", command=lambda g_id=gasto_id: editar_gasto(g_id), bg="#4CAF50", fg="white", width=8)
-        #         btn_editar.grid(row=i, column=3, padx=5)
-
-        #         # Botão para remover gasto
-        #         btn_remover = tk.Button(frame_tabela, text="Remover", command=lambda g_id=gasto_id: remover_gasto(g_id), bg="#D9534F", fg="white", width=8)
-        #         btn_remover.grid(row=i, column=4, padx=5)
-
         # Botão para filtrar
         btn_filtrar = tk.Button(self.edit_window, text="Filtrar", command=carregar_gastos, bg="#4CAF50", fg="white", font=("Arial", 12))
         btn_filtrar.pack(pady=10)
@@ -371,7 +363,7 @@ class MainMenu(tk.Frame):
             # Criar uma janela de edição para o gasto
             janela_edicao = tk.Toplevel(self.edit_window)
             janela_edicao.title("Editar Gasto")
-            janela_edicao.geometry("250x150")
+            janela_edicao.geometry("300x200")
             janela_edicao.config(bg="#ffffff")
 
             tk.Label(janela_edicao, text="Nova Descrição:", bg="#ffffff").pack(pady=5)
