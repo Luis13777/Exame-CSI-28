@@ -4,6 +4,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 from BancoDeDados import *
 import datetime
+from Elementos.botoes import *
 
 class MainMenu(tk.Frame):
     def __init__(self, app):
@@ -66,46 +67,31 @@ class MainMenu(tk.Frame):
         self.toggle_btn.place(x=10, y=10)
 
     def create_option_buttons(self):
-        # Função auxiliar para aplicar o efeito de hover nos botões
-        def apply_hover_effect(button):
-            def on_enter(e):
-                button['background'] = '#6666ff'  # cor ao passar o mouse
-                button['foreground'] = 'white'
 
-            def on_leave(e):
-                button['background'] = '#3333cc'  # cor padrão
-                button['foreground'] = 'white'
+        self.options_frame.update_idletasks()  # Força a atualização da geometria
+        largura = self.options_frame.winfo_width()*0.33
 
-            button.bind("<Enter>", on_enter)
-            button.bind("<Leave>", on_leave)
+        btn_consultar = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        # Criação dos botões com o estilo moderno
-        btn_consultar = tk.Button(self.options_frame, text="Consultar Gastos", command=self.show_chart,
-                                bg="#3333cc", fg="white", font=("Arial", 14, "bold"), bd=0, padx=20, pady=10, width=20)
-        btn_opcao2 = tk.Button(self.options_frame, text="Opção 2", command=self.show_chart,
-                            bg="#3333cc", fg="white", font=("Arial", 14, "bold"), bd=0, padx=20, pady=10, width=20)
-        btn_opcao3 = tk.Button(self.options_frame, text="Opção 3", command=self.show_chart,
-                            bg="#3333cc", fg="white", font=("Arial", 14, "bold"), bd=0, padx=20, pady=10, width=20)
-        btn_opcao4 = tk.Button(self.options_frame, text="Opção 4", command=self.show_chart,
-                            bg="#3333cc", fg="white", font=("Arial", 14, "bold"), bd=0, padx=20, pady=10, width=20)
+        btn_opcao2 = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        # Aplicando o efeito de hover para cada botão
-        apply_hover_effect(btn_consultar)
-        apply_hover_effect(btn_opcao2)
-        apply_hover_effect(btn_opcao3)
-        apply_hover_effect(btn_opcao4)
+        btn_opcao3 = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
+        btn_opcao4 = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        
+    
         # Usando grid para que os botões ocupem o espaço disponível
         self.options_frame.grid_rowconfigure(0, weight=1)
         self.options_frame.grid_rowconfigure(1, weight=1)
+        self.options_frame.grid_rowconfigure(2, weight=5)
         self.options_frame.grid_columnconfigure(0, weight=1)
         self.options_frame.grid_columnconfigure(1, weight=1)
 
         # Posiciona os botões na grid
-        btn_consultar.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
-        btn_opcao2.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
-        btn_opcao3.grid(row=1, column=0, sticky="nsew", padx=20, pady=20)
-        btn_opcao4.grid(row=1, column=1, sticky="nsew", padx=20, pady=20)
+        btn_consultar.grid(row=0, column=0, sticky="nsew", padx=5, pady=20)
+        btn_opcao2.grid(row=0, column=1, sticky="nsew", padx=5, pady=20)
+        btn_opcao3.grid(row=1, column=0, sticky="nsew", padx=5, pady=20)
+        btn_opcao4.grid(row=1, column=1, sticky="nsew", padx=5, pady=20)
 
 
     def show_chart(self):
