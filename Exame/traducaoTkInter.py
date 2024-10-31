@@ -1,11 +1,11 @@
-import tkinter as tk
+# import tkinter as tk
 
-class tela:
-    def __init__(self, nome, largura, altura):
-        self.tela = tk.Tk()
-        self.tela.title(nome)
-        self.tela.geometry(f"{largura}x{altura}")
+# class tela:
+#     def __init__(self, nome, largura, altura):
+#         self.tela = tk.Tk()
+#         self.tela.title(nome)
+#         self.tela.geometry(f"{largura}x{altura}")
 
-    def get_tela(self):
-        return self.tela
+#     def get_tela(self):
+#         return self.tela
     

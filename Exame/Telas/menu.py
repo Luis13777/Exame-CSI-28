@@ -93,7 +93,6 @@ class MainMenu(tk.Frame):
         btn_opcao3.grid(row=1, column=0, sticky="nsew", padx=5, pady=20)
         btn_opcao4.grid(row=1, column=1, sticky="nsew", padx=5, pady=20)
 
-
     def show_chart(self):
         if self.menu_open:
             self.toggle_sidebar()  # Fecha o menu lateral se estiver aberto
@@ -103,13 +102,36 @@ class MainMenu(tk.Frame):
         self.label_title.pack_forget()
 
         self.back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
-        self.create_gasto_chart()
+
+        # Exibir campos de data
+        frame_data = tk.Frame(self, bg="#ffffff")
+        self.frame_data = frame_data
+        frame_data.pack(pady=10)
+
+        tk.Label(frame_data, text="Data Inicial (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=0, padx=5)
+        self.entry_data_inicial = tk.Entry(frame_data, width=12)
+        self.entry_data_inicial.grid(row=0, column=1)
+
+        tk.Label(frame_data, text="Data Final (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=2, padx=5)
+        self.entry_data_final = tk.Entry(frame_data, width=12)
+        self.entry_data_final.grid(row=0, column=3)
+
+        # Botão para gerar o gráfico
+        btn_gerar = tk.Button(frame_data, text="Gerar Gráfico", command=self.create_gasto_chart, bg="#4CAF50", fg="white", font=("Arial", 12))
+        btn_gerar.grid(row=0, column=4, padx=10)
+
+
+
+        # self.create_gasto_chart()
 
     def show_main_menu(self):
-    # Remove o gráfico se ele estiver presente
+        # Remove o gráfico se ele estiver presente
         if self.canvas_widget:
             self.canvas_widget.destroy()
             self.canvas_widget = None
+        
+        self.frame_data.pack_forget()
+
 
         # Remove o conteúdo alternativo e exibe os botões de opções novamente
         self.back_button.place_forget()  # Oculta o botão de voltar
@@ -132,7 +154,12 @@ class MainMenu(tk.Frame):
 
     def create_gasto_chart(self):
         """Cria o gráfico de gastos com base nos dados do usuário"""
-        gastos = self.fetch_gastos_data()
+        data_inicial = self.entry_data_inicial.get()
+        data_final = self.entry_data_final.get()
+
+        # gastos = self.fetch_gastos_data()
+
+        gastos = self.fetch_gastos_data(data_inicial, data_final)
 
         if not gastos.empty:
             categorias = gastos['categoria'].unique()
@@ -161,15 +188,23 @@ class MainMenu(tk.Frame):
             canvas.draw()
 
         else:
-            label_no_data = tk.Label(self, text="Nenhum dado de gasto disponível.", bg="#f0f4f7", font=("Arial", 12))
-            label_no_data.pack(pady=20)
+            label_no_data = tk.Label(self.frame_data, text="Nenhum dado de gasto disponível.", bg="#f0f4f7", font=("Arial", 12))
+            label_no_data.grid(row=1, column=0, columnspan=5, pady=20)  # Usando grid ao invés de pack
 
-    def fetch_gastos_data(self):
+
+    def fetch_gastos_data(self, data_inicial, data_final):
         """Busca os dados de gastos do usuário logado"""
         email_usuario = self.app.usuario
         query = f"SELECT g.categoria, g.valor, g.data FROM usuarios u JOIN gastos g ON u.usuario_id = g.usuario_id WHERE u.email = '{email_usuario}'"
+        query = ("""
+        SELECT g.categoria, g.valor, g.data 
+        FROM usuarios u 
+        JOIN gastos g ON u.usuario_id = g.usuario_id 
+        WHERE u.email = ? AND g.data BETWEEN ? AND ?
+        """)
         cursor = self.conn.cursor()
-        cursor.execute(query)
+        # cursor.execute(query)
+        cursor.execute(query, (email_usuario, data_inicial, data_final))
 
         rows = cursor.fetchall()
         if rows:
