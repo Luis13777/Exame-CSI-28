@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from BancoDeDados import *
 import datetime
 from Elementos.botoes import *
+# from datetime import datetime
 
 class MainMenu(tk.Frame):
     def __init__(self, app):
@@ -55,13 +56,9 @@ class MainMenu(tk.Frame):
         self.btn_logout = tk.Button(self.box_de_botoes, text="Logout", command=self.logout,
                                  bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
         
-        self.update_pagina = tk.Button(self.box_de_botoes, text="Recarregar página", command=self.editar_remover_gasto,
-                                    bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
-        
         self.editar_perfil = tk.Button(self.box_de_botoes, text="Editar Perfil", command=self.editar_remover_gasto,
                                     bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
 
-        self.update_pagina.pack(fill="x", pady=10, padx=20)
         self.editar_perfil.pack(fill="x", pady=10, padx=20)
         self.btn_logout.pack(fill="x", pady=10, padx=20)
 
@@ -137,11 +134,11 @@ class MainMenu(tk.Frame):
 
 
         tk.Label(frame_data, text="Data Inicial (YYYY-MM-DD):", font=("Arial", 12, "bold"), bg="#ffffff").grid(row=1, column=0, padx=5, columnspan=3)
-        self.entry_data_inicial = tk.Entry(frame_data, width=12)
+        self.entry_data_inicial = tk.Entry(frame_data, width=12, justify="center")
         self.entry_data_inicial.grid(row=2, column=0, columnspan=3)
 
         tk.Label(frame_data, text="Data Final (YYYY-MM-DD):", font=("Arial", 12, "bold"), bg="#ffffff").grid(row=1, column=2, padx=5, columnspan=3)
-        self.entry_data_final = tk.Entry(frame_data, width=12)
+        self.entry_data_final = tk.Entry(frame_data, width=12, justify="center")
         self.entry_data_final.grid(row=2, column=2, columnspan=3)
 
         # # Botão para gerar o gráfico
@@ -287,13 +284,13 @@ class MainMenu(tk.Frame):
         # Campo de descrição
         label_desc = tk.Label(self.add_window, text="Descrição:", bg="#ffffff", font=("Arial", 12))
         label_desc.pack(pady=10)
-        entry_desc = tk.Entry(self.add_window, width=25)
+        entry_desc = tk.Entry(self.add_window, width=25, justify="center")
         entry_desc.pack()
 
         # Campo de valor
         label_valor = tk.Label(self.add_window, text="Valor:", bg="#ffffff", font=("Arial", 12))
         label_valor.pack(pady=10)
-        entry_valor = tk.Entry(self.add_window, width=25)
+        entry_valor = tk.Entry(self.add_window, width=25, justify="center")
         entry_valor.pack()
 
         # Botão "OK" para enviar os dados
@@ -328,6 +325,8 @@ class MainMenu(tk.Frame):
         self.edit_window.transient(self)
         self.edit_window.grab_set()
 
+        
+
 
         # Centralizar a janela na tela
         self.edit_window.update_idletasks()
@@ -338,17 +337,28 @@ class MainMenu(tk.Frame):
         self.edit_window.geometry(f"{largura_janela}x{altura_janela}+{pos_x}+{pos_y}")
 
         # Título e campos de data para filtrar gastos
-        tk.Label(self.edit_window, text="Filtro de Data", bg="#ffffff", font=("Arial", 14, "bold")).pack(pady=10)
+        tk.Label(self.edit_window, text="Filtro de Data", bg="#ffffff", font=("Arial", 14, "bold")).pack(pady=(0, 10))
         frame_filtro = tk.Frame(self.edit_window, bg="#ffffff")
-        frame_filtro.pack(pady=10)
+        frame_filtro.pack(fill="x")
+        self.frame_filtro = frame_filtro
 
-        tk.Label(frame_filtro, text="Data Inicial (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=0, padx=5)
-        entry_data_inicial = tk.Entry(frame_filtro, width=12)
-        entry_data_inicial.grid(row=0, column=1)
+        
+        self.frame_filtro.grid_rowconfigure(0, weight=1)
+        self.frame_filtro.grid_rowconfigure(1, weight=1)
+        self.frame_filtro.grid_columnconfigure(0, weight=1)
+        self.frame_filtro.grid_columnconfigure(1, weight=1)
+        self.frame_filtro.grid_columnconfigure(2, weight=1)
+        self.frame_filtro.grid_columnconfigure(3, weight=1)
+        self.frame_filtro.grid_columnconfigure(4, weight=1)
 
-        tk.Label(frame_filtro, text="Data Final (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=2, padx=5)
-        entry_data_final = tk.Entry(frame_filtro, width=12)
-        entry_data_final.grid(row=0, column=3)
+
+        tk.Label(frame_filtro, text="Data Inicial (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=1, sticky="nsew")
+        entry_data_inicial = tk.Entry(frame_filtro, justify="center")
+        entry_data_inicial.grid(row=1, column=1)
+
+        tk.Label(frame_filtro, text="Data Final (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=3, sticky="nsew")
+        entry_data_final = tk.Entry(frame_filtro, justify="center")
+        entry_data_final.grid(row=1, column=3)
 
         def carregar_gastos():
             data_inicial = entry_data_inicial.get()
@@ -409,9 +419,19 @@ class MainMenu(tk.Frame):
             def salvar_edicao():
                 nova_descricao = entry_editar_desc.get()
                 novo_valor = entry_editar_valor.get()
+                nova_data = entry_editar_data.get()
+
+                # Validação do formato da data
+                try:
+                    nova_data = datetime.datetime.strptime(nova_data, "%Y-%m-%d").date()
+                except ValueError:
+                    print("Data inválida! Insira a data no formato YYYY-MM-DD.")
+                    tk.messagebox.showinfo('Erro', 'Data inválida! Insira a data no formato YYYY-MM-DD.')
+                    janela_edicao.focus_set()  # Mantém o foco na janela de edição
+                    return
                 try:
                     cursor = self.conn.cursor()
-                    cursor.execute("UPDATE gastos SET categoria = ?, valor = ? WHERE id_gasto = ?", (nova_descricao, float(novo_valor), gasto_id))
+                    cursor.execute("UPDATE gastos SET categoria = ?, valor = ?, data = ? WHERE id_gasto = ?", (nova_descricao, float(novo_valor), nova_data, gasto_id))
                     self.conn.commit()
                     cursor.close()
                     carregar_gastos()
@@ -422,16 +442,32 @@ class MainMenu(tk.Frame):
             # Criar uma janela de edição para o gasto
             janela_edicao = tk.Toplevel(self.edit_window)
             janela_edicao.title("Editar Gasto")
-            janela_edicao.geometry("300x200")
+            janela_edicao.geometry("400x250")
             janela_edicao.config(bg="#ffffff")
 
+            query = f"select categoria, valor, data from gastos where id_gasto = {gasto_id}"
+
+            cursor = self.conn.cursor()
+            cursor.execute(query)
+            resultado = cursor.fetchone()
+            cursor.close()
+
+
+
             tk.Label(janela_edicao, text="Nova Descrição:", bg="#ffffff").pack(pady=5)
-            entry_editar_desc = tk.Entry(janela_edicao, width=25)
+            entry_editar_desc = tk.Entry(janela_edicao, width=25, justify="center")
             entry_editar_desc.pack(pady=5)
+            entry_editar_desc.insert(0, resultado[0])
 
             tk.Label(janela_edicao, text="Novo Valor:", bg="#ffffff").pack(pady=5)
-            entry_editar_valor = tk.Entry(janela_edicao, width=10)
+            entry_editar_valor = tk.Entry(janela_edicao, width=25, justify="center")
             entry_editar_valor.pack(pady=5)
+            entry_editar_valor.insert(0, resultado[1])
+
+            tk.Label(janela_edicao, text="Novo Data:", bg="#ffffff").pack(pady=5)
+            entry_editar_data = tk.Entry(janela_edicao, width=25, justify="center")
+            entry_editar_data.pack(pady=5)
+            entry_editar_data.insert(0, resultado[2])
 
             btn_salvar = tk.Button(janela_edicao, text="Salvar", command=salvar_edicao, bg="#4CAF50", fg="white")
             btn_salvar.pack(pady=10)
