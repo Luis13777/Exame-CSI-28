@@ -14,7 +14,7 @@ class MainMenu(tk.Frame):
         
         # Inicializa o canvas do gráfico como None
         self.canvas_widget = None
-
+        self.label_no_data = None
         # Layout principal
         
         app.root.geometry("900x700")
@@ -52,14 +52,18 @@ class MainMenu(tk.Frame):
         self.box_de_botoes.place(x=0, y=75, relwidth=1)
 
         # Adicionar botões no menu lateral com mais espaçamento
-        self.btn_add = tk.Button(self.box_de_botoes, text="Adicionar Gastos", command=self.adicionar_gasto,
+        self.btn_logout = tk.Button(self.box_de_botoes, text="Logout", command=self.logout,
                                  bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
         
-        self.btn_edit_remove = tk.Button(self.box_de_botoes, text="Editar Gastos", command=self.editar_remover_gasto,
+        self.update_pagina = tk.Button(self.box_de_botoes, text="Recarregar página", command=self.editar_remover_gasto,
+                                    bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
+        
+        self.editar_perfil = tk.Button(self.box_de_botoes, text="Editar Perfil", command=self.editar_remover_gasto,
                                     bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
 
-        self.btn_add.pack(fill="x", pady=10, padx=20)
-        self.btn_edit_remove.pack(fill="x", pady=10, padx=20)
+        self.update_pagina.pack(fill="x", pady=10, padx=20)
+        self.editar_perfil.pack(fill="x", pady=10, padx=20)
+        self.btn_logout.pack(fill="x", pady=10, padx=20)
 
         # Botão que alterna o menu lateral
         self.toggle_btn = tk.Button(self, text="☰", command=self.toggle_sidebar,
@@ -73,11 +77,11 @@ class MainMenu(tk.Frame):
 
         btn_consultar = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        btn_opcao2 = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_opcao2 = RoundedButton(self.options_frame, text="Adicionar Gastos", command=self.adicionar_gasto, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        btn_opcao3 = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_opcao3 = RoundedButton(self.options_frame, text="Editar Gastos", command=self.editar_remover_gasto, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        btn_opcao4 = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_opcao4 = RoundedButton(self.options_frame, text="Consultar Investimentos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
         
     
         # Usando grid para que os botões ocupem o espaço disponível
@@ -100,37 +104,64 @@ class MainMenu(tk.Frame):
         # Oculta os botões e exibe o botão de voltar
         self.options_frame.pack_forget()
         self.label_title.pack_forget()
-
         self.back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
+        
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=4)
+        self.columnconfigure(0, weight=1)
 
         # Exibir campos de data
         frame_data = tk.Frame(self, bg="#ffffff")
         self.frame_data = frame_data
-        frame_data.pack(pady=10)
+        frame_data.grid(row=0, column=0, padx=100, sticky="nsew")
 
-        tk.Label(frame_data, text="Data Inicial (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=0, padx=5)
+        self.lugarParaOGrafico = tk.Frame(self, bg="#ffffff")
+        self.lugarParaOGrafico.grid(row=1, column=0, sticky="nsew")
+
+        # frame_data.pack(pady=10)
+        # frame_data.pack(padx=100, fill="x", expand=True)  # Exibe os botões de opções
+
+
+        self.frame_data.grid_rowconfigure(0, weight=1)
+        self.frame_data.grid_rowconfigure(1, weight=1)
+        self.frame_data.grid_rowconfigure(2, weight=1)
+        self.frame_data.grid_rowconfigure(3, weight=1)
+        self.frame_data.grid_columnconfigure(0, weight=3)
+        self.frame_data.grid_columnconfigure(1, weight=3)
+        self.frame_data.grid_columnconfigure(2, weight=1)
+        self.frame_data.grid_columnconfigure(3, weight=3)
+        self.frame_data.grid_columnconfigure(4, weight=3)
+
+        # tk.Label(frame_data, text="Gastos", bg="#ffffff").grid(row=0, column=2, padx=5)
+        tk.Label(frame_data, text=f"Gastos", font=("Arial", 24, "bold"), bg="#ffffff").grid(row=0, column=2, padx=10)
+
+
+        tk.Label(frame_data, text="Data Inicial (YYYY-MM-DD):", font=("Arial", 12, "bold"), bg="#ffffff").grid(row=1, column=0, padx=5, columnspan=3)
         self.entry_data_inicial = tk.Entry(frame_data, width=12)
-        self.entry_data_inicial.grid(row=0, column=1)
+        self.entry_data_inicial.grid(row=2, column=0, columnspan=3)
 
-        tk.Label(frame_data, text="Data Final (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=2, padx=5)
+        tk.Label(frame_data, text="Data Final (YYYY-MM-DD):", font=("Arial", 12, "bold"), bg="#ffffff").grid(row=1, column=2, padx=5, columnspan=3)
         self.entry_data_final = tk.Entry(frame_data, width=12)
-        self.entry_data_final.grid(row=0, column=3)
+        self.entry_data_final.grid(row=2, column=2, columnspan=3)
 
-        # Botão para gerar o gráfico
-        btn_gerar = tk.Button(frame_data, text="Gerar Gráfico", command=self.create_gasto_chart, bg="#4CAF50", fg="white", font=("Arial", 12))
-        btn_gerar.grid(row=0, column=4, padx=10)
+        # # Botão para gerar o gráfico
 
+        self.frame_data.update_idletasks() 
+        largura = self.frame_data.winfo_width()*0.5
 
+        btn_gerar = RoundedButton(frame_data, text="Gerar Gráfico", command=self.create_gasto_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        # self.create_gasto_chart()
+        btn_gerar.grid(row=3, sticky="nsew", column=1, padx=10, columnspan=3)
 
     def show_main_menu(self):
         # Remove o gráfico se ele estiver presente
-        if self.canvas_widget:
-            self.canvas_widget.destroy()
-            self.canvas_widget = None
+        # if self.canvas_widget:
+        #     self.canvas_widget.destroy()
+        #     self.canvas_widget = None
         
-        self.frame_data.pack_forget()
+        self.frame_data.destroy()
+        self.label_no_data = None
+        self.lugarParaOGrafico.destroy()
 
 
         # Remove o conteúdo alternativo e exibe os botões de opções novamente
@@ -139,6 +170,8 @@ class MainMenu(tk.Frame):
         self.options_frame.pack(fill="both", expand=True)  # Exibe os botões de opções
 
     def toggle_sidebar(self):
+        self.sidebar.tkraise()
+        self.toggle_btn.tkraise()
         if self.menu_open:
             # Animação para fechar o menu
             for i in range(0, 201, 20):
@@ -153,6 +186,9 @@ class MainMenu(tk.Frame):
             self.menu_open = True
 
     def create_gasto_chart(self):
+        if self.canvas_widget:
+            self.canvas_widget.destroy()
+            self.canvas_widget = None
         """Cria o gráfico de gastos com base nos dados do usuário"""
         data_inicial = self.entry_data_inicial.get()
         data_final = self.entry_data_final.get()
@@ -162,6 +198,10 @@ class MainMenu(tk.Frame):
         gastos = self.fetch_gastos_data(data_inicial, data_final)
 
         if not gastos.empty:
+
+            if self.label_no_data:
+                self.label_no_data.destroy()
+
             categorias = gastos['categoria'].unique()
             valores = [gastos[gastos['categoria'] == cat]['valor'].sum() for cat in categorias]
 
@@ -170,27 +210,25 @@ class MainMenu(tk.Frame):
             ax.axis('equal')  # Mantém o gráfico circular
 
             # Desenha o gráfico
-            canvas = FigureCanvasTkAgg(fig, master=self)
+            canvas = FigureCanvasTkAgg(fig, master=self.lugarParaOGrafico)
             canvas_widget = canvas.get_tk_widget()
-            self.canvas_widget = canvas.get_tk_widget()  # Armazena a referência do canvas
+
+            # Armazena a referência do canvas para permitir remoção futura
+            self.canvas_widget = canvas_widget
+
+            # Posiciona o canvas na interface usando grid
+            canvas_widget.place(relwidth=1, relheight=1)
+            # canvas_widget.pack(fill="both", expand=True)
 
 
-            # Obtém a altura do frame que contém o gráfico (após layout ser atualizado)
-            frame_height = self.winfo_height()
 
-            # Calcula 10% da altura do frame
-            pady_percent = int(frame_height * 0.10)
-
-            # Aplica o padding calculado
-            canvas_widget.pack(pady=pady_percent, fill="both", expand=True)
 
             # Finalmente desenha o gráfico
             canvas.draw()
 
         else:
-            label_no_data = tk.Label(self.frame_data, text="Nenhum dado de gasto disponível.", bg="#f0f4f7", font=("Arial", 12))
-            label_no_data.grid(row=1, column=0, columnspan=5, pady=20)  # Usando grid ao invés de pack
-
+            self.label_no_data = tk.Label(self.frame_data, text="Nenhum dado de gasto disponível.", bg="#f0f4f7", font=("Arial", 12))
+            self.label_no_data.grid(row=5, column=0, columnspan=5)  # Usando grid ao invés de pack
 
     def fetch_gastos_data(self, data_inicial, data_final):
         """Busca os dados de gastos do usuário logado"""
@@ -408,3 +446,8 @@ class MainMenu(tk.Frame):
                 carregar_gastos()
             except Exception as e:
                 print(f"Erro ao remover gasto: {e}")
+        
+    def logout(self):
+        self.conn.close()
+        self.app.usuario = None
+        self.app.show_frame("LoginScreen")

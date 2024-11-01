@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, font
 from BancoDeDados import *
-from Telas.menu import *
+# from Telas.menu import *
 
 
 class LoginScreen(tk.Frame):
@@ -51,7 +51,7 @@ class LoginScreen(tk.Frame):
     def login(self):
 
         self.app.usuario = "luis@email.com"
-        self.app.show_frame(MainMenu)
+        self.app.show_frame("MainMenu")
 
         return
 
