@@ -1,6 +1,8 @@
 import tkinter as tk
 from Telas.loginPage import LoginScreen
 from Telas.menu import MainMenu
+from Telas.adicionarGastos import AdicionarGasto
+from BancoDeDados import *
 
 
 class App:
@@ -13,6 +15,8 @@ class App:
         self.current_frame = None
         self.show_frame("LoginScreen")
         self.usuario = None
+
+        self.conn = conectar_ao_sql_server()
     
     def show_frame(self, frame_class):
         """Troca as telas."""
@@ -22,6 +26,8 @@ class App:
             self.current_frame = LoginScreen(self)
         elif frame_class == "MainMenu":
             self.current_frame = MainMenu(self)
+        elif frame_class == "AdicionarGasto":
+            self.current_frame = AdicionarGasto(self)
         self.current_frame.pack(fill="both", expand=True,)
     
     def run(self):

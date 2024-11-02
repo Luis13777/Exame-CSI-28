@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, font
 from BancoDeDados import *
-# from Telas.menu import *
+
 
 
 class LoginScreen(tk.Frame):
@@ -14,7 +14,7 @@ class LoginScreen(tk.Frame):
         self.button_font = font.Font(family="Helvetica", size=12, weight="bold")
         
         # Frame para a centralização dos elementos
-        self.frame = tk.Frame(app.root, bg="#ffffff", padx=20, pady=20, relief="flat", bd=2)
+        self.frame = tk.Frame(self, bg="#ffffff", padx=20, pady=20, relief="flat", bd=2)
         self.frame.place(relx=0.5, rely=0.5, anchor="center")
 
         # Título estilizado

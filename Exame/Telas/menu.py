@@ -261,6 +261,11 @@ class MainMenu(tk.Frame):
         return usuario_id
 
     def adicionar_gasto(self):
+
+        self.app.show_frame("AdicionarGasto")
+
+        return
+
         # Criar uma nova janela
         self.add_window = tk.Toplevel(self)
         self.add_window.title("Adicionar Gasto")
@@ -322,8 +327,6 @@ class MainMenu(tk.Frame):
         btn_ok = RoundedButton(self.add_window, text="OK", command=enviar_dados, radius=altura/2, bg="#4CAF50", hover_bg="#96DF96", fg="white", font=("Arial", 13, "bold"), width=largura, height=altura)
             
         btn_ok.pack(pady=20)
-
-
 
     def editar_remover_gasto(self):
         # Criar uma nova janela para edição e remoção
