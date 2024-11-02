@@ -313,8 +313,17 @@ class MainMenu(tk.Frame):
             except Exception as e:
                 print(f"Erro ao adicionar gasto: {e}")
 
-        btn_ok = tk.Button(self.add_window, text="OK", command=enviar_dados, bg="#4CAF50", fg="white", font=("Arial", 12))
+        # btn_ok = tk.Button(self.add_window, text="OK", command=enviar_dados, bg="#4CAF50", fg="white", font=("Arial", 12))
+
+        self.add_window.update_idletasks()
+        altura = self.add_window.winfo_height()*0.14
+        largura = self.add_window.winfo_width()*0.2
+
+        btn_ok = RoundedButton(self.add_window, text="OK", command=enviar_dados, radius=altura/2, bg="#4CAF50", hover_bg="#96DF96", fg="white", font=("Arial", 13, "bold"), width=largura, height=altura)
+            
         btn_ok.pack(pady=20)
+
+
 
     def editar_remover_gasto(self):
         # Criar uma nova janela para edição e remoção
@@ -324,8 +333,6 @@ class MainMenu(tk.Frame):
         self.edit_window.config(bg="#ffffff")
         self.edit_window.transient(self)
         self.edit_window.grab_set()
-
-        
 
 
         # Centralizar a janela na tela
@@ -395,19 +402,23 @@ class MainMenu(tk.Frame):
                 # Exibe a data do gasto
                 tk.Label(frame_tabela, text=data, bg="#ffffff", width=12, anchor="center").grid(row=i, column=2, padx=5, pady=5, sticky="ew")
 
-                # Botão para editar gasto
-                btn_editar = tk.Button(frame_tabela, text="Editar", command=lambda g_id=gasto_id: editar_gasto(g_id),
-                                    bg="#4CAF50", fg="white", width=8)
+    
+                altura = frame_tabela.winfo_height()*0.08
+                largura = frame_tabela.winfo_width()*0.13
+                btn_editar = RoundedButton(frame_tabela, text="Editar", command=lambda g_id=gasto_id: editar_gasto(g_id), radius=altura/2, bg="#4CAF50", hover_bg="#96DF96", fg="white", font=("Arial", 9, "bold"), width=largura, height=altura)
                 btn_editar.grid(row=i, column=3, padx=5, pady=5, sticky="ew")
 
-                # Botão para remover gasto
-                btn_remover = tk.Button(frame_tabela, text="Remover", command=lambda g_id=gasto_id: remover_gasto(g_id),
-                                        bg="#D9534F", fg="white", width=8)
+
+                btn_remover = RoundedButton(frame_tabela, text="Remover", command=lambda g_id=gasto_id: remover_gasto(g_id), radius=altura/2, bg="#D9534F", hover_bg="#E08E8B", fg="white", font=("Arial", 9, "bold"), width=largura, height=altura)
+                
                 btn_remover.grid(row=i, column=4, padx=5, pady=5, sticky="ew")
 
 
-        # Botão para filtrar
-        btn_filtrar = tk.Button(self.edit_window, text="Filtrar", command=carregar_gastos, bg="#4CAF50", fg="white", font=("Arial", 12))
+
+        largura = self.edit_window.winfo_width()*0.2
+        altura = self.edit_window.winfo_height()*0.08
+
+        btn_filtrar = RoundedButton(self.edit_window, text="Filtrar", command=carregar_gastos, radius=altura/2, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 12, "bold"), width=largura, height=altura)
         btn_filtrar.pack(pady=10)
 
         # Frame para exibir a tabela de gastos
@@ -469,8 +480,16 @@ class MainMenu(tk.Frame):
             entry_editar_data.pack(pady=5)
             entry_editar_data.insert(0, resultado[2])
 
-            btn_salvar = tk.Button(janela_edicao, text="Salvar", command=salvar_edicao, bg="#4CAF50", fg="white")
-            btn_salvar.pack(pady=10)
+            # btn_salvar = tk.Button(janela_edicao, text="Salvar", command=salvar_edicao, bg="#4CAF50", fg="white")
+
+            janela_edicao.update_idletasks()
+
+            largura = janela_edicao.winfo_width()*0.2
+            altura = janela_edicao.winfo_height()*0.1
+            
+            btn_salvar = RoundedButton(janela_edicao, text="Salvar", command=salvar_edicao, radius=altura/2, bg="#4CAF50", hover_bg="#96DF96", fg="white", font=("Arial", 10, "bold"), width=largura, height=altura)
+                
+            btn_salvar.pack(pady=(20, 0))
 
         # Função para remover um gasto
         def remover_gasto(gasto_id):
