@@ -15,13 +15,13 @@ class App:
         
         # Iniciar com a tela de login
         self.current_frame = None
-        self.show_frame("LoginScreen")
         self.usuario = None
 
         self.conn = conectar_ao_sql_server()
+
+        self.show_frame("LoginScreen")
     
     def show_frame(self, frame_class):
-        """Troca as telas."""
         if self.current_frame is not None:
             self.current_frame.destroy()
         if frame_class == "LoginScreen":
@@ -35,7 +35,7 @@ class App:
         elif frame_class == "ConsultarGastos":
             self.current_frame = consultarGastos(self)
 
-        self.current_frame.pack(fill="both", expand=True,)
+        self.current_frame.pack(fill="both", expand=True)
 
     
     def run(self):

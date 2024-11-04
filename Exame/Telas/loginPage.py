@@ -10,7 +10,7 @@ class LoginScreen(tk.Frame):
         self.app = app
 
         # Criando uma fonte personalizada
-        self.title_font = font.Font(family="Helvetica", size=18, weight="bold")
+        self.title_font = font.Font(family="Helvetica", size=24, weight="bold")
         self.button_font = font.Font(family="Helvetica", size=12, weight="bold")
         
         # Frame para a centralização dos elementos
@@ -22,13 +22,13 @@ class LoginScreen(tk.Frame):
         label_title.pack(pady=20)
 
         # Caixa de texto para o nome de usuário
-        self.entry_username = tk.Entry(self.frame, bg="#f0f0f0", fg="#333333", font=("Arial", 12), bd=1, relief="flat")
+        self.entry_username = tk.Entry(self.frame, bg="#f0f0f0", fg="#333333", font=("Arial", 12, "bold"), bd=5, relief="flat")
         self.entry_username.pack(pady=10, ipadx=5, ipady=5, fill="x")
         self.entry_username.insert(0, "Email")
 
 
         # Caixa de texto para a senha
-        self.entry_password = tk.Entry(self.frame, show="*", bg="#f0f0f0", fg="#333333", font=("Arial", 12), bd=1, relief="flat")
+        self.entry_password = tk.Entry(self.frame, show="*", bg="#f0f0f0", fg="#333333", font=("Arial", 12, "bold"), bd=5, relief="flat")
         self.entry_password.pack(pady=10, ipadx=5, ipady=5, fill="x")
         self.entry_password.insert(0, "Senha")
 
@@ -59,7 +59,7 @@ class LoginScreen(tk.Frame):
         password = self.entry_password.get()
         # Se o login for bem-sucedido
 
-        conn = conectar_ao_sql_server()
+        conn = self.app.conn
 
         resultado = consultar_usuarios(conn, username)
         if resultado is not None:

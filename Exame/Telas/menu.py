@@ -1,20 +1,16 @@
 import tkinter as tk
-from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 from BancoDeDados import *
-import datetime
 from Elementos.botoes import *
 
 class MainMenu(tk.Frame):
     def __init__(self, app):
-        tk.Frame.__init__(self, app.root)
+        tk.Frame.__init__(self, app.root, bg="#ffffff")
         self.app = app
-        self.conn = conectar_ao_sql_server()
+        self.conn = self.app.conn
         
         app.root.geometry("900x700")
-        self.config(bg="#ffffff")
-        self.pack(fill="both", expand=True)
 
         # Título
         label_title = tk.Label(self, text=f"Bem vindo {self.get_usuario_id()}", font=("Arial", 24, "bold"), bg="#ffffff")
@@ -36,8 +32,7 @@ class MainMenu(tk.Frame):
         self.sidebar.place(x=-200, y=0, relheight=1)  # Define a altura relativa a 100% da janela
 
         self.box_de_botoes = tk.Frame(self.sidebar, bg="#333")
-        self.box_de_botoes.pack(fill="x", expand=True)
-        self.box_de_botoes.place(x=0, y=75, relwidth=1)
+        self.box_de_botoes.pack(fill="x", expand=False, pady=75)
 
         # Adicionar botões no menu lateral com mais espaçamento
         self.btn_logout = tk.Button(self.box_de_botoes, text="Logout", command=self.logout, bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
@@ -54,8 +49,7 @@ class MainMenu(tk.Frame):
 
     def create_option_buttons(self):
 
-        self.options_frame.update_idletasks()  # Força a atualização da geometria
-        largura = self.options_frame.winfo_width()*0.33
+        largura = 300
 
         btn_consultar = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 

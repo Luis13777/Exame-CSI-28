@@ -14,8 +14,8 @@ class EditarGastos(tk.Frame):
         self.edit_window = tk.Frame(self, bg="#ffffff")
         self.edit_window.pack(fill="both", expand=True)  # Para ocupar todo o espaço
 
-        # Título e campos de data para filtrar gastos
-        tk.Label(self.edit_window, text="Filtro de Data", bg="#ffffff", font=("Arial", 14, "bold")).pack(pady=(0, 10))
+
+
         frame_filtro = tk.Frame(self.edit_window, bg="#ffffff")
         frame_filtro.pack(fill="x", pady=10, padx=50)
         self.frame_filtro = frame_filtro
@@ -23,28 +23,25 @@ class EditarGastos(tk.Frame):
         
         self.frame_filtro.grid_rowconfigure(0, weight=1)
         self.frame_filtro.grid_rowconfigure(1, weight=1)
-        self.frame_filtro.grid_columnconfigure(0, weight=1)
-        self.frame_filtro.grid_columnconfigure(1, weight=1)
+        self.frame_filtro.grid_rowconfigure(2, weight=1)
+        self.frame_filtro.grid_rowconfigure(3, weight=1)
+        self.frame_filtro.grid_columnconfigure(0, weight=3)
+        self.frame_filtro.grid_columnconfigure(1, weight=3)
         self.frame_filtro.grid_columnconfigure(2, weight=1)
-        self.frame_filtro.grid_columnconfigure(3, weight=1)
-        self.frame_filtro.grid_columnconfigure(4, weight=1)
+        self.frame_filtro.grid_columnconfigure(3, weight=3)
+        self.frame_filtro.grid_columnconfigure(4, weight=3)
 
+        tk.Label(self.frame_filtro, text="Filtro de Data", bg="#ffffff", font=("Arial", 24, "bold")).grid(row=0, column=2, padx=10, pady=20)
 
-        tk.Label(self.frame_filtro, text="Data Inicial (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=1, sticky="nsew")
+        tk.Label(self.frame_filtro, text="Data Inicial (YYYY-MM-DD):", font=("Arial", 12, "bold"), bg="#ffffff").grid(row=1, column=0, padx=5, columnspan=3)
 
-        # entry_data_inicial = tk.Entry(frame_filtro, justify="center")
-        # entry_data_inicial.grid(row=1, column=1)
+        entry_data_inicial = tk.Entry(self.frame_filtro, bg="#f0f0f0", fg="#333333", font=("Arial", 10, "bold"), bd=5, relief="flat", justify="center")
+        entry_data_inicial.grid(row=2, column=0, columnspan=3, pady=(20, 0))
 
-        entry_data_inicial = tk.Entry(self.frame_filtro, bg="#f0f0f0", fg="#333333", font=("Arial", 10), bd=1, relief="flat", justify="center")
-        entry_data_inicial.grid(row=1, column=1)
+        tk.Label(self.frame_filtro, text="Data Final (YYYY-MM-DD):", font=("Arial", 12, "bold"), bg="#ffffff").grid(row=1, column=2, padx=5, columnspan=3)
 
-        tk.Label(self.frame_filtro, text="Data Final (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=3, sticky="nsew")
-
-        # entry_data_final = tk.Entry(frame_filtro, justify="center")
-        # entry_data_final.grid(row=1, column=3)
-
-        entry_data_final = tk.Entry(frame_filtro, bg="#f0f0f0", fg="#333333", font=("Arial", 10), bd=1, relief="flat", justify="center")
-        entry_data_final.grid(row=1, column=3)
+        entry_data_final = tk.Entry(frame_filtro, bg="#f0f0f0", fg="#333333", font=("Arial", 10, "bold"), bd=5, relief="flat", justify="center")
+        entry_data_final.grid(row=2, column=2, columnspan=3, pady=(20, 0))
 
         # Botão para voltar, inicialmente oculto
         self.back_button = tk.Button(self, text="←", font=("Arial", 20), bg="#333333", fg="white", command=lambda: app.show_frame("MainMenu"))

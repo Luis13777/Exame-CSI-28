@@ -19,8 +19,7 @@ class consultarGastos(tk.Frame):
 
 
         # Botão para voltar
-        self.back_button = tk.Button(self, text="←", font=("Arial", 20), bg="#333333", fg="white",
-                                command=lambda: self.app.show_frame("MainMenu"))
+        self.back_button = tk.Button(self, text="←", font=("Arial", 20), bg="#333333", fg="white", command=lambda: self.app.show_frame("MainMenu"))
         self.back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
 
         
@@ -36,10 +35,6 @@ class consultarGastos(tk.Frame):
         self.lugarParaOGrafico = tk.Frame(self.consult_window, bg="#ffffff")
         self.lugarParaOGrafico.grid(row=1, column=0, sticky="nsew")
 
-        # frame_data.pack(pady=10)
-        # frame_data.pack(padx=100, fill="x", expand=True)  # Exibe os botões de opções
-
-
         self.frame_data.grid_rowconfigure(0, weight=1)
         self.frame_data.grid_rowconfigure(1, weight=1)
         self.frame_data.grid_rowconfigure(2, weight=1)
@@ -50,22 +45,21 @@ class consultarGastos(tk.Frame):
         self.frame_data.grid_columnconfigure(3, weight=3)
         self.frame_data.grid_columnconfigure(4, weight=3)
 
-        # tk.Label(frame_data, text="Gastos", bg="#ffffff").grid(row=0, column=2, padx=5)
         tk.Label(self.frame_data, text=f"Gastos", font=("Arial", 24, "bold"), bg="#ffffff").grid(row=0, column=2, padx=10)
 
-
         tk.Label(self.frame_data, text="Data Inicial (YYYY-MM-DD):", font=("Arial", 12, "bold"), bg="#ffffff").grid(row=1, column=0, padx=5, columnspan=3)
-        self.entry_data_inicial = tk.Entry(self.frame_data, bg="#f0f0f0", fg="#333333", font=("Arial", 10), bd=1, relief="flat", justify="center")
+        
+        self.entry_data_inicial = tk.Entry(self.frame_data, bg="#f0f0f0", fg="#333333", font=("Arial", 10, "bold"), bd=5, relief="flat", justify="center")
 
 
         self.entry_data_inicial.grid(row=2, column=0, columnspan=3)
 
         tk.Label(self.frame_data, text="Data Final (YYYY-MM-DD):", font=("Arial", 12, "bold"), bg="#ffffff").grid(row=1, column=2, padx=5, columnspan=3)
-        self.entry_data_final = tk.Entry(self.frame_data, bg="#f0f0f0", fg="#333333", font=("Arial", 10), bd=1, relief="flat", justify="center")
+        self.entry_data_final = tk.Entry(self.frame_data, bg="#f0f0f0", fg="#333333", font=("Arial", 10, "bold"), bd=5, relief="flat", justify="center")
 
         self.entry_data_final.grid(row=2, column=2, columnspan=3)
 
-        # # Botão para gerar o gráfico
+        # Botão para gerar o gráfico
 
         largura = 150
 

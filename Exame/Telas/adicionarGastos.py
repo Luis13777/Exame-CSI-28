@@ -15,21 +15,21 @@ class AdicionarGasto(tk.Frame):
         data_atual = datetime.date.today().strftime("%Y-%m-%d")  # Formato de data "YYYY-MM-DD"
 
         # Campo de descrição
-        label_desc = tk.Label(self.frame, text="Descrição:", bg="#ffffff", font=("Arial", 12))
-        label_desc.pack()
-        # entry_desc = tk.Entry(self.frame, width=25, justify="center")
-        # entry_desc.pack()
+        titulo = tk.Label(self, text="Adicionar gasto:", bg="#ffffff", font=("Arial", 24, "bold"))
+        titulo.place(relx=0.5, rely=0.1, anchor="center")
 
-        entry_desc = tk.Entry(self.frame, bg="#f0f0f0", fg="#333333", font=("Arial", 12), bd=1, relief="flat", justify="center")
+        # Campo de descrição
+        label_desc = tk.Label(self.frame, text="Descrição:", bg="#ffffff", font=("Arial", 12, "bold"))
+        label_desc.pack()
+
+        entry_desc = tk.Entry(self.frame, bg="#f0f0f0", fg="#333333", font=("Arial", 10, "bold"), bd=5, relief="flat", justify="center")
         entry_desc.pack(pady=10, ipadx=5, ipady=5, fill="x")
 
         # Campo de valor
-        label_valor = tk.Label(self.frame, text="Valor:", bg="#ffffff", font=("Arial", 12))
+        label_valor = tk.Label(self.frame, text="Valor:", bg="#ffffff", font=("Arial", 12, "bold"))
         label_valor.pack()
-        # entry_valor = tk.Entry(self.frame, width=25, justify="center")
-        # entry_valor.pack()
 
-        entry_valor = tk.Entry(self.frame, bg="#f0f0f0", fg="#333333", font=("Arial", 12), bd=1, relief="flat", justify="center")
+        entry_valor = tk.Entry(self.frame, bg="#f0f0f0", fg="#333333", font=("Arial", 10), bd=5, relief="flat", justify="center")
         entry_valor.pack(pady=10, ipadx=5, ipady=5, fill="x")
 
         # Botão para voltar, inicialmente oculto
