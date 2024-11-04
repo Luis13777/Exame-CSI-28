@@ -32,6 +32,11 @@ class AdicionarGasto(tk.Frame):
         entry_valor = tk.Entry(self.frame, bg="#f0f0f0", fg="#333333", font=("Arial", 12), bd=1, relief="flat", justify="center")
         entry_valor.pack(pady=10, ipadx=5, ipady=5, fill="x")
 
+        # Botão para voltar, inicialmente oculto
+        self.back_button = tk.Button(self, text="←", font=("Arial", 20), bg="#333333", fg="white", command=lambda: app.show_frame("MainMenu"))
+        
+        self.back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
+
         # Botão "OK" para enviar os dados
         def enviar_dados():
             # Recupera os valores dos campos

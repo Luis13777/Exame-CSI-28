@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from BancoDeDados import *
 import datetime
 from Elementos.botoes import *
-# from datetime import datetime
 
 class MainMenu(tk.Frame):
     def __init__(self, app):
@@ -329,6 +328,10 @@ class MainMenu(tk.Frame):
         btn_ok.pack(pady=20)
 
     def editar_remover_gasto(self):
+
+        self.app.show_frame("EditarGasto")
+
+        return
         # Criar uma nova janela para edição e remoção
         self.edit_window = tk.Toplevel(self)
         self.edit_window.title("Editar ou Remover Gastos")
