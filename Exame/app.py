@@ -3,6 +3,7 @@ from Telas.loginPage import LoginScreen
 from Telas.menu import MainMenu
 from Telas.adicionarGastos import AdicionarGasto
 from Telas.editarGastos import EditarGastos
+from Telas.consultarGastos import consultarGastos
 from BancoDeDados import *
 
 
@@ -31,6 +32,8 @@ class App:
             self.current_frame = AdicionarGasto(self)
         elif frame_class == "EditarGasto":
             self.current_frame = EditarGastos(self)
+        elif frame_class == "ConsultarGastos":
+            self.current_frame = consultarGastos(self)
 
         self.current_frame.pack(fill="both", expand=True,)
 

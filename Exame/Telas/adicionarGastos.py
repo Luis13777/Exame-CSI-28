@@ -75,7 +75,8 @@ class AdicionarGasto(tk.Frame):
 
     
 
-    def run(self):
-        self.root.mainloop()
+    
+
+
 
 

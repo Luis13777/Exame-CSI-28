@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import font
 from Elementos.botoes import *
 import datetime
+import pandas as pd
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.pyplot as plt
 
 class EditarGastos(tk.Frame):
     def __init__(self, app):
@@ -27,15 +30,15 @@ class EditarGastos(tk.Frame):
         self.frame_filtro.grid_columnconfigure(4, weight=1)
 
 
-        tk.Label(frame_filtro, text="Data Inicial (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=1, sticky="nsew")
+        tk.Label(self.frame_filtro, text="Data Inicial (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=1, sticky="nsew")
 
         # entry_data_inicial = tk.Entry(frame_filtro, justify="center")
         # entry_data_inicial.grid(row=1, column=1)
 
-        entry_data_inicial = tk.Entry(frame_filtro, bg="#f0f0f0", fg="#333333", font=("Arial", 10), bd=1, relief="flat", justify="center")
+        entry_data_inicial = tk.Entry(self.frame_filtro, bg="#f0f0f0", fg="#333333", font=("Arial", 10), bd=1, relief="flat", justify="center")
         entry_data_inicial.grid(row=1, column=1)
 
-        tk.Label(frame_filtro, text="Data Final (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=3, sticky="nsew")
+        tk.Label(self.frame_filtro, text="Data Final (YYYY-MM-DD):", bg="#ffffff").grid(row=0, column=3, sticky="nsew")
 
         # entry_data_final = tk.Entry(frame_filtro, justify="center")
         # entry_data_final.grid(row=1, column=3)
@@ -187,3 +190,5 @@ class EditarGastos(tk.Frame):
             except Exception as e:
                 print(f"Erro ao remover gasto: {e}")
                
+
+    
