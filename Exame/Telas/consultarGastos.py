@@ -17,11 +17,7 @@ class consultarGastos(tk.Frame):
         self.consult_window = tk.Frame(self, bg="#ffffff")
         self.consult_window.pack(fill="both", expand=True)  # Para ocupar todo o espaço
 
-
-        # Botão para voltar
-        self.back_button = tk.Button(self, text="←", font=("Arial", 20), bg="#333333", fg="white", command=lambda: self.app.show_frame("MainMenu"))
-        self.back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
-
+        criarBackButton(self, app)
         
         self.consult_window.grid_rowconfigure(0, weight=1)
         self.consult_window.grid_rowconfigure(1, weight=4)
@@ -48,7 +44,7 @@ class consultarGastos(tk.Frame):
         tk.Label(self.frame_data, text=f"Gastos", font=("Arial", 24, "bold"), bg="#ffffff").grid(row=0, column=2, padx=10)
 
         tk.Label(self.frame_data, text="Data Inicial (YYYY-MM-DD):", font=("Arial", 12, "bold"), bg="#ffffff").grid(row=1, column=0, padx=5, columnspan=3)
-        
+
         self.entry_data_inicial = tk.Entry(self.frame_data, bg="#f0f0f0", fg="#333333", font=("Arial", 10, "bold"), bd=5, relief="flat", justify="center")
 
 

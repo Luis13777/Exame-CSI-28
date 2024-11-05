@@ -32,10 +32,6 @@ class AdicionarGasto(tk.Frame):
         entry_valor = tk.Entry(self.frame, bg="#f0f0f0", fg="#333333", font=("Arial", 10), bd=5, relief="flat", justify="center")
         entry_valor.pack(pady=10, ipadx=5, ipady=5, fill="x")
 
-        # Botão para voltar, inicialmente oculto
-        self.back_button = tk.Button(self, text="←", font=("Arial", 20), bg="#333333", fg="white", command=lambda: app.show_frame("MainMenu"))
-        
-        self.back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
 
         # Botão "OK" para enviar os dados
         def enviar_dados():
@@ -59,19 +55,16 @@ class AdicionarGasto(tk.Frame):
 
 
 
-
         altura = 30
         largura = 100
 
-        btn_ok = RoundedButton(self.frame, text="OK", command=enviar_dados, radius=altura/3, bg="#4CAF50", hover_bg="#96DF96", fg="white", font=("Arial", 13, "bold"), width=largura, height=altura)
+        btn_ok = RoundedButton(self.frame, text="OK", command=enviar_dados, radius=altura/3, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 13, "bold"), width=largura, height=altura)
             
         btn_ok.pack(pady=20)
 
+        criarBackButton(self, app)
 
-        # Botão para voltar
-        self.back_button = tk.Button(self, text="←", font=("Arial", 20), bg="#333333", fg="white",
-                                command=lambda: self.app.show_frame("MainMenu"))
-        self.back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
+
 
     
 

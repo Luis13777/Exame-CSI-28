@@ -27,6 +27,14 @@ class MainMenu(tk.Frame):
         # Variável de controle para o estado do menu lateral
         self.menu_open = False
 
+        self.create_sidebar()
+
+        
+        # Botão que alterna o menu lateral
+        self.toggle_btn = tk.Button(self, text="☰", command=self.toggle_sidebar, bg="#333", fg="white", padx=10, pady=5, font=("Arial", 16))
+        self.toggle_btn.place(x=10, y=10)
+
+    def create_sidebar(self):
         # Criar um frame para o menu lateral que cobre toda a altura da tela
         self.sidebar = tk.Frame(self, bg="#333", width=200)
         self.sidebar.place(x=-200, y=0, relheight=1)  # Define a altura relativa a 100% da janela
@@ -37,15 +45,11 @@ class MainMenu(tk.Frame):
         # Adicionar botões no menu lateral com mais espaçamento
         self.btn_logout = tk.Button(self.box_de_botoes, text="Logout", command=self.logout, bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
         
-        self.editar_perfil = tk.Button(self.box_de_botoes, text="Editar Perfil", command=self.editar_remover_gasto, bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
+        self.editar_perfil = tk.Button(self.box_de_botoes, text="Editar Perfil", command=self.editar_perfil, bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
 
         self.editar_perfil.pack(fill="x", pady=10, padx=20)
         self.btn_logout.pack(fill="x", pady=10, padx=20)
 
-        # Botão que alterna o menu lateral
-        self.toggle_btn = tk.Button(self, text="☰", command=self.toggle_sidebar,
-                                    bg="#333", fg="white", padx=10, pady=5, font=("Arial", 16))
-        self.toggle_btn.place(x=10, y=10)
 
     def create_option_buttons(self):
 
@@ -77,7 +81,6 @@ class MainMenu(tk.Frame):
 
         self.app.show_frame("ConsultarGastos")
         
-
     def toggle_sidebar(self):
         self.sidebar.tkraise()
         self.toggle_btn.tkraise()
@@ -109,7 +112,9 @@ class MainMenu(tk.Frame):
     def editar_remover_gasto(self):
         self.app.show_frame("EditarGasto")
 
+    def editar_perfil(self):
+        self.app.show_frame("EditarPerfil")
+
     def logout(self):
-        self.conn.close()
         self.app.usuario = None
         self.app.show_frame("LoginScreen")

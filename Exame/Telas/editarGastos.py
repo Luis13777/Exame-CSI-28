@@ -43,10 +43,7 @@ class EditarGastos(tk.Frame):
         entry_data_final = tk.Entry(frame_filtro, bg="#f0f0f0", fg="#333333", font=("Arial", 10, "bold"), bd=5, relief="flat", justify="center")
         entry_data_final.grid(row=2, column=2, columnspan=3, pady=(20, 0))
 
-        # Botão para voltar, inicialmente oculto
-        self.back_button = tk.Button(self, text="←", font=("Arial", 20), bg="#333333", fg="white", command=lambda: app.show_frame("MainMenu"))
-        
-        self.back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
+        criarBackButton(self, app)
 
         def carregar_gastos():
             data_inicial = entry_data_inicial.get()
