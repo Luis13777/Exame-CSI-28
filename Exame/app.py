@@ -5,6 +5,7 @@ from Telas.adicionarGastos import AdicionarGasto
 from Telas.editarGastos import EditarGastos
 from Telas.consultarGastos import consultarGastos
 from Telas.editarPerfil import editarPerfil
+from Telas.investimentos import ConsultaAcoes
 from BancoDeDados import *
 
 
@@ -37,10 +38,11 @@ class App:
             self.current_frame = consultarGastos(self)
         elif frame_class == "EditarPerfil":
             self.current_frame = editarPerfil(self)
+        elif frame_class == "Investimentos":
+            self.current_frame = ConsultaAcoes(self)
 
         self.current_frame.pack(fill="both", expand=True)
 
     
     def run(self):
         self.root.mainloop()
-

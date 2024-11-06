@@ -50,7 +50,6 @@ class MainMenu(tk.Frame):
         self.editar_perfil.pack(fill="x", pady=10, padx=20)
         self.btn_logout.pack(fill="x", pady=10, padx=20)
 
-
     def create_option_buttons(self):
 
         largura = 300
@@ -61,7 +60,7 @@ class MainMenu(tk.Frame):
 
         btn_opcao3 = RoundedButton(self.options_frame, text="Editar Gastos", command=self.editar_remover_gasto, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        btn_opcao4 = RoundedButton(self.options_frame, text="Consultar Investimentos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_opcao4 = RoundedButton(self.options_frame, text="Consultar Investimentos", command=self.investimentos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
         
     
         # Usando grid para que os botões ocupem o espaço disponível
@@ -114,6 +113,9 @@ class MainMenu(tk.Frame):
 
     def editar_perfil(self):
         self.app.show_frame("EditarPerfil")
+
+    def investimentos(self):
+        self.app.show_frame("Investimentos")
 
     def logout(self):
         self.app.usuario = None
