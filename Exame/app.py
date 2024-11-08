@@ -6,6 +6,7 @@ from Telas.editarGastos import EditarGastos
 from Telas.consultarGastos import consultarGastos
 from Telas.editarPerfil import editarPerfil
 from Telas.investimentos import ConsultaAcoes
+from Telas.adicionarInvestimentos import AdicionarInvestimentos
 from BancoDeDados import *
 
 
@@ -40,6 +41,8 @@ class App:
             self.current_frame = editarPerfil(self)
         elif frame_class == "Investimentos":
             self.current_frame = ConsultaAcoes(self)
+        elif frame_class == "AdicionarInvestimentos":
+            self.current_frame = AdicionarInvestimentos(self)
 
         self.current_frame.pack(fill="both", expand=True)
 

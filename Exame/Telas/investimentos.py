@@ -10,6 +10,8 @@ class ConsultaAcoes(tk.Frame):
         tk.Frame.__init__(self, app.root, bg="#ffffff")
         self.app = app
 
+        self.area_grafico = None
+
         self.pack(fill="both", expand=True)
 
         self.frame = tk.Frame(self, bg="#ffffff")
@@ -23,8 +25,31 @@ class ConsultaAcoes(tk.Frame):
         self.frame_acoes.pack(fill="both", expand=True)
         self.api_key = self.get_api_key()
 
-        self.exibir_acoes()
 
+        simbolos = self.get_simbolos()
+
+        # Criação da caixa de seleção para escolher um símbolo
+        self.simbolo_selecionado = tk.StringVar(self.frame_acoes)
+        self.simbolo_selecionado.set(simbolos[0])  # Define o primeiro símbolo como padrão
+
+        self.caixa_selecao = tk.OptionMenu(self.frame_acoes, self.simbolo_selecionado, *simbolos)
+
+        # Configurações de estilo
+        self.caixa_selecao.config(
+            bg="#3333cc",          # Fundo azul
+            fg="white",         # Texto branco para contraste
+            relief="flat",      # Estilo flat
+            font=("Arial", 12, "bold")  # Fonte Arial tamanho 12
+        )
+
+        self.caixa_selecao.pack(pady=10)
+
+        altura = 30
+        largura = 100
+    
+        self.botao_consultar = RoundedButton(self.frame_acoes, text="Consultar", command=lambda: self.exibir_acoes(self.simbolo_selecionado.get()), radius=altura/3, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 13, "bold"), width=largura, height=altura)
+        self.botao_consultar.pack(pady=10)
+            
         criarBackButton(self, app)
 
     def get_api_key(self):
@@ -58,7 +83,6 @@ class ConsultaAcoes(tk.Frame):
         response = requests.get(url, params=params)
         data = response.json()
 
-        print(data)
 
 
         # Extrair dados de preços diários
@@ -75,40 +99,44 @@ class ConsultaAcoes(tk.Frame):
 
         return ultimos_30_dias[::-1]
     
-    def exibir_acoes(self):
-        simbolos = self.get_simbolos()
-        for i, simbolo in enumerate(simbolos):
-            dados = self.consultar_acao(simbolo)
+    def exibir_acoes(self, simbolo):
 
-            area_grafico = tk.Frame(self.frame_acoes, bg="#ffffff")
-            area_grafico.pack(fill="both", expand=True)
+        if self.area_grafico:
+            self.area_grafico.destroy()
 
-            datas = []
-            fechamentos = []
-            for data, fechamento in dados:
-                datas.append(data)
-                fechamentos.append(fechamento)
-
-            # Criar o gráfico de linha usando Matplotlib
-            fig, ax = plt.subplots(figsize=(10, 3), dpi=100)
-            ax.plot(datas, fechamentos, marker='o', color='blue', linestyle='-')
-            
-            # Configurações do gráfico
-            ax.set_title(f'{simbolo}')
-            ax.set_xlabel('Data')
-            ax.set_ylabel('Fechamento (USD)')
-            ax.tick_params(axis='x', rotation=45)
-
-            # Exibir apenas algumas datas no eixo X (ex: uma a cada 5 datas)
-            intervalo = max(1, len(datas) // 10)  # ajusta o intervalo de ticks no eixo X
-            ax.set_xticks(datas[::intervalo])
-            ax.tick_params(axis='x', rotation=45)
-
-            # Inserir o gráfico no Tkinter
-            canvas = FigureCanvasTkAgg(fig, master=area_grafico)
-            canvas.draw()
-            canvas.get_tk_widget().pack()
+        dados = self.consultar_acao(simbolo)
 
 
 
+        self.area_grafico = tk.Frame(self.frame_acoes, bg="#ffffff")
+        self.area_grafico.pack(fill="x", expand=True)
+
+        datas = []
+        fechamentos = []
+        for data, fechamento in dados:
+            datas.append(data)
+            fechamentos.append(fechamento)
+
+        # Criar o gráfico de linha usando Matplotlib
+        fig, ax = plt.subplots(figsize=(12, 8), dpi=100)
+        ax.plot(datas, fechamentos, marker='o', color='blue', linestyle='-')
+        
+        # Configurações do gráfico
+        ax.set_title(f'Ativo: {simbolo}')
+        ax.set_xlabel('Data')
+        ax.set_ylabel('Fechamento (USD)')
+
+        # Exibir apenas algumas datas no eixo X (ex: uma a cada 5 datas)
+        intervalo = max(1, len(datas) // 6)  # ajusta o intervalo de ticks no eixo X
+        ax.set_xticks(datas[::intervalo])
+        ax.tick_params(axis='x', rotation=0)
+
+        # Adicionar grid
+        ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='gray') 
+
+
+        # Inserir o gráfico no Tkinter
+        self.canvas = FigureCanvasTkAgg(fig, master=self.area_grafico)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(fill="both", expand=True)
 

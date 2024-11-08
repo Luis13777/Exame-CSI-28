@@ -29,7 +29,6 @@ class MainMenu(tk.Frame):
 
         self.create_sidebar()
 
-        
         # Botão que alterna o menu lateral
         self.toggle_btn = tk.Button(self, text="☰", command=self.toggle_sidebar, bg="#333", fg="white", padx=10, pady=5, font=("Arial", 16))
         self.toggle_btn.place(x=10, y=10)
@@ -56,11 +55,13 @@ class MainMenu(tk.Frame):
 
         btn_consultar = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        btn_opcao2 = RoundedButton(self.options_frame, text="Adicionar Gastos", command=self.adicionar_gasto, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_adicionar_gastos = RoundedButton(self.options_frame, text="Adicionar Gastos", command=self.adicionar_gasto, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        btn_opcao3 = RoundedButton(self.options_frame, text="Editar Gastos", command=self.editar_remover_gasto, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_editar_gastos = RoundedButton(self.options_frame, text="Editar Gastos", command=self.editar_remover_gasto, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        btn_opcao4 = RoundedButton(self.options_frame, text="Consultar Investimentos", command=self.investimentos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_consultar_investimentos = RoundedButton(self.options_frame, text="Consultar Investimentos", command=self.investimentos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+
+        btn_adicionar_investimentos = RoundedButton(self.options_frame, text="Adicionar Investimentos", command=self.add_investimetnos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
         
     
         # Usando grid para que os botões ocupem o espaço disponível
@@ -72,9 +73,10 @@ class MainMenu(tk.Frame):
 
         # Posiciona os botões na grid
         btn_consultar.grid(row=0, column=0, sticky="nsew", padx=5, pady=20)
-        btn_opcao2.grid(row=0, column=1, sticky="nsew", padx=5, pady=20)
-        btn_opcao3.grid(row=1, column=0, sticky="nsew", padx=5, pady=20)
-        btn_opcao4.grid(row=1, column=1, sticky="nsew", padx=5, pady=20)
+        btn_adicionar_gastos.grid(row=0, column=1, sticky="nsew", padx=5, pady=20)
+        btn_editar_gastos.grid(row=1, column=0, sticky="nsew", padx=5, pady=20)
+        btn_consultar_investimentos.grid(row=1, column=1, sticky="nsew", padx=5, pady=20)
+        btn_adicionar_investimentos.grid(row=2, column=0, columnspan=3, sticky="n", padx=5, pady=20)
 
     def show_chart(self):
 
@@ -116,6 +118,9 @@ class MainMenu(tk.Frame):
 
     def investimentos(self):
         self.app.show_frame("Investimentos")
+
+    def add_investimetnos(self):
+        self.app.show_frame("AdicionarInvestimentos")
 
     def logout(self):
         self.app.usuario = None
