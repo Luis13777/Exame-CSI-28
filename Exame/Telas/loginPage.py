@@ -12,6 +12,8 @@ class LoginScreen(tk.Frame):
         # Criando uma fonte personalizada
         self.title_font = font.Font(family="Helvetica", size=24, weight="bold")
         self.button_font = font.Font(family="Helvetica", size=12, weight="bold")
+
+
         
         # Frame para a centralização dos elementos
         self.frame = tk.Frame(self, bg="#ffffff", padx=20, pady=20, relief="flat", bd=2)
@@ -41,6 +43,21 @@ class LoginScreen(tk.Frame):
         # Adicionando efeito de hover ao botão
         self.btn_login.bind("<Enter>", self.on_enter)
         self.btn_login.bind("<Leave>", self.on_leave)
+
+        # Botão para criar uma nova conta
+
+        self.btn_criar_conta = tk.Button(self.frame, text="Criar conta", font=self.button_font, bg="#ffffff", bd=0,fg="#3333cc" ,relief="flat", cursor="hand2", command=lambda: app.show_frame("RegisterScreen"))
+        
+        self.btn_criar_conta.pack()
+
+        self.btn_criar_conta.bind("<Enter>", self.on_enter_criar_conta)
+        self.btn_criar_conta.bind("<Leave>", self.on_leave_criar_conta)
+
+    def on_enter_criar_conta(self, event):
+        event.widget['fg'] = '#6666ff'
+
+    def on_leave_criar_conta(self, event):
+        event.widget['fg'] = '#3333cc'
 
     def on_enter(self, event):
         event.widget['background'] = '#6666ff'  # Cor ao passar o mouse
@@ -73,7 +90,5 @@ class LoginScreen(tk.Frame):
 
         conn.close()
 
-    def run(self):
-        self.root.mainloop()
 
 

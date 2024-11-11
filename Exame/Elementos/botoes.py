@@ -58,8 +58,8 @@ class RoundedButton(tk.Frame):
     def on_leave(self):
         self.draw_rounded_rectangle(self.bg)
 
-def criarBackButton(parent, app):
-    back_button = RoundedButton(parent, text="←", command=lambda: app.show_frame("MainMenu"), radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 20, "bold"), width=40, height=40)
+def criarBackButton(parent, app, address="MainMenu"):
+    back_button = RoundedButton(parent, text="←", command=lambda: app.show_frame(address), radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 20, "bold"), width=40, height=40)
         
     back_button.place(relx=1.0, y=10, x=-10, anchor="ne")
 

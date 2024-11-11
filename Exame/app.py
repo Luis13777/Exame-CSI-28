@@ -7,6 +7,8 @@ from Telas.consultarGastos import consultarGastos
 from Telas.editarPerfil import editarPerfil
 from Telas.investimentos import ConsultaAcoes
 from Telas.adicionarInvestimentos import AdicionarInvestimentos
+from Telas.removerInvestimentos import RemoverInvestimentos
+from Telas.registerPage import RegisterScreen
 from BancoDeDados import *
 
 
@@ -43,6 +45,10 @@ class App:
             self.current_frame = ConsultaAcoes(self)
         elif frame_class == "AdicionarInvestimentos":
             self.current_frame = AdicionarInvestimentos(self)
+        elif frame_class == "RemoverInvestimentos":
+            self.current_frame = RemoverInvestimentos(self)
+        elif frame_class == "RegisterScreen":
+            self.current_frame = RegisterScreen(self)
 
         self.current_frame.pack(fill="both", expand=True)
 

@@ -61,7 +61,9 @@ class MainMenu(tk.Frame):
 
         btn_consultar_investimentos = RoundedButton(self.options_frame, text="Consultar Investimentos", command=self.investimentos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
 
-        btn_adicionar_investimentos = RoundedButton(self.options_frame, text="Adicionar Investimentos", command=self.add_investimetnos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_adicionar_investimentos = RoundedButton(self.options_frame, text="Adicionar Investimentos", command=self.add_investimentos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+
+        btn_remover_investimentos = RoundedButton(self.options_frame, text="Remover Investimentos", command=self.remover_investimentos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
         
     
         # Usando grid para que os botões ocupem o espaço disponível
@@ -72,11 +74,13 @@ class MainMenu(tk.Frame):
         self.options_frame.grid_columnconfigure(1, weight=1)
 
         # Posiciona os botões na grid
-        btn_consultar.grid(row=0, column=0, sticky="nsew", padx=5, pady=20)
-        btn_adicionar_gastos.grid(row=0, column=1, sticky="nsew", padx=5, pady=20)
-        btn_editar_gastos.grid(row=1, column=0, sticky="nsew", padx=5, pady=20)
-        btn_consultar_investimentos.grid(row=1, column=1, sticky="nsew", padx=5, pady=20)
-        btn_adicionar_investimentos.grid(row=2, column=0, columnspan=3, sticky="n", padx=5, pady=20)
+        btn_consultar.grid(row=0, column=0, sticky="n", padx=5, pady=20)
+        btn_adicionar_gastos.grid(row=0, column=1, sticky="n", padx=5, pady=20)
+        btn_editar_gastos.grid(row=1, column=0, sticky="n", padx=5, pady=20)
+        btn_consultar_investimentos.grid(row=1, column=1, sticky="n", padx=5, pady=20)
+        btn_adicionar_investimentos.grid(row=2, column=0, sticky="n", padx=5, pady=20)
+        btn_remover_investimentos.grid(row=2, column=1, sticky="n", padx=5, pady=20)
+
 
     def show_chart(self):
 
@@ -119,8 +123,11 @@ class MainMenu(tk.Frame):
     def investimentos(self):
         self.app.show_frame("Investimentos")
 
-    def add_investimetnos(self):
+    def add_investimentos(self):
         self.app.show_frame("AdicionarInvestimentos")
+
+    def remover_investimentos(self):
+        self.app.show_frame("RemoverInvestimentos")
 
     def logout(self):
         self.app.usuario = None
