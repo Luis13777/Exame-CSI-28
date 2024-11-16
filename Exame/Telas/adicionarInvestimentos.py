@@ -1,5 +1,6 @@
 import tkinter as tk
 from Elementos.botoes import *
+import requests
 
 class AdicionarInvestimentos(tk.Frame):
     def __init__(self, app):
@@ -42,6 +43,19 @@ class AdicionarInvestimentos(tk.Frame):
                 self.mensgemDeNaoConfirmacao = tk.Label(self.frame, text="Ativo já adicionado!", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="red")
                 self.mensgemDeNaoConfirmacao.pack(pady=10)
             else:
+                # verificar se o ativo existe
+
+                api_key = "sua_chave_da_alpha_vantage"  # Substitua pela sua chave de API
+                url = f"https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={ativo}&apikey={api_key}"
+
+                response = requests.get(url)
+                data = response.json()
+
+
+                if not ("bestMatches" in data and len(data["bestMatches"]) > 0):
+                    self.mensgemDeNaoConfirmacao = tk.Label(self.frame, text="Ativo não encontrado!", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="red")
+                    self.mensgemDeNaoConfirmacao.pack(pady=10)
+                    return
                 try:
                     cursor = app.conn.cursor()
                     email_usuario = app.usuario
@@ -50,7 +64,7 @@ class AdicionarInvestimentos(tk.Frame):
 
                     # mensagem de confirmação
 
-                    self.mensgemDeNaoConfirmacao = tk.Label(self.frame, text="Gasto adicionado com sucesso!", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="green")
+                    self.mensgemDeNaoConfirmacao = tk.Label(self.frame, text="Ativo adicionado com sucesso!", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="green")
 
                     self.mensgemDeNaoConfirmacao.pack(pady=10)
                     

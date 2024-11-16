@@ -14,7 +14,8 @@ class EditarGastos(tk.Frame):
         self.edit_window = tk.Frame(self, bg="#ffffff")
         self.edit_window.pack(fill="both", expand=True)  # Para ocupar todo o espaço
 
-
+        self.label_no_data = None
+        self.frame_tabela = None
 
         frame_filtro = tk.Frame(self.edit_window, bg="#ffffff")
         frame_filtro.pack(fill="x", pady=10, padx=50)
@@ -48,6 +49,31 @@ class EditarGastos(tk.Frame):
         def carregar_gastos():
             data_inicial = entry_data_inicial.get()
             data_final = entry_data_final.get()
+            data_inicial = data_inicial.replace(" ", "")
+            data_final = data_final.replace(" ", "")
+
+            if self.frame_tabela != None:
+                self.frame_tabela.destroy()
+
+            # Frame para exibir a tabela de gastos
+            self.frame_tabela = tk.Frame(self.edit_window, bg="#ffffff")
+            self.frame_tabela.pack(fill="both", expand=True, padx=100, pady=(50,50))
+
+            if self.label_no_data:
+                self.label_no_data.destroy()
+                
+            try:
+                datetime.datetime.strptime(data_inicial, "%Y-%m-%d")
+                datetime.datetime.strptime(data_final, "%Y-%m-%d")
+            except ValueError:
+                self.label_no_data = tk.Label(self.frame_filtro, text="Datas inválidas. Por favor, preencha no formato YYYY-MM-DD.", bg="#f0f4f7", font=("Arial", 12))
+                self.label_no_data.grid(row=3, column=0, columnspan=5, pady=10)
+                return
+            
+            if data_inicial == "" or data_final == "":
+                self.label_no_data = tk.Label(self.frame_filtro, text="Preencha todos os campos!", bg="#f0f4f7", font=("Arial", 12))
+                self.label_no_data.grid(row=3, column=0, columnspan=5, pady=10)
+                return
 
             # Consulta ao banco com filtro de data
             query = ("SELECT id_gasto, categoria, valor, data FROM gastos "
@@ -56,38 +82,37 @@ class EditarGastos(tk.Frame):
             cursor = app.conn.cursor()
             cursor.execute(query, (self.app.usuario, data_inicial, data_final))
             resultados = cursor.fetchall()
-            cursor.close()
 
             # Limpa a tabela antes de recarregar
-            for widget in frame_tabela.winfo_children():
+            for widget in self.frame_tabela.winfo_children():
                 widget.destroy()
 
-            # Configura cada coluna da frame_tabela para expandir com a janela
-            frame_tabela.grid_columnconfigure(0, weight=2)  # Coluna Descrição
-            frame_tabela.grid_columnconfigure(1, weight=1)  # Coluna Valor
-            frame_tabela.grid_columnconfigure(2, weight=1)  # Coluna Data
-            frame_tabela.grid_columnconfigure(3, weight=1)  # Coluna Editar
-            frame_tabela.grid_columnconfigure(4, weight=1)  # Coluna Remover
+            # Configura cada coluna da self.frame_tabela para expandir com a janela
+            self.frame_tabela.grid_columnconfigure(0, weight=2)  # Coluna Descrição
+            self.frame_tabela.grid_columnconfigure(1, weight=1)  # Coluna Valor
+            self.frame_tabela.grid_columnconfigure(2, weight=1)  # Coluna Data
+            self.frame_tabela.grid_columnconfigure(3, weight=1)  # Coluna Editar
+            self.frame_tabela.grid_columnconfigure(4, weight=1)  # Coluna Remover
 
             # Exibir dados em tabela com botões de ação
             for i, (gasto_id, descricao, valor, data) in enumerate(resultados):
                 # Exibe a descrição do gasto
-                tk.Label(frame_tabela, text=descricao, bg="#ffffff", width=20, anchor="w").grid(row=i, column=0, padx=5, pady=5, sticky="ew")
+                tk.Label(self.frame_tabela, text=descricao, bg="#ffffff", width=20, anchor="w").grid(row=i, column=0, padx=5, pady=5, sticky="ew")
                 
                 # Exibe o valor do gasto
-                tk.Label(frame_tabela, text=f"R${valor:.2f}", bg="#ffffff", width=10, anchor="center").grid(row=i, column=1, padx=5, pady=5, sticky="ew")
+                tk.Label(self.frame_tabela, text=f"R${valor:.2f}", bg="#ffffff", width=10, anchor="center").grid(row=i, column=1, padx=5, pady=5, sticky="ew")
                 
                 # Exibe a data do gasto
-                tk.Label(frame_tabela, text=data, bg="#ffffff", width=12, anchor="center").grid(row=i, column=2, padx=5, pady=5, sticky="ew")
+                tk.Label(self.frame_tabela, text=data, bg="#ffffff", width=12, anchor="center").grid(row=i, column=2, padx=5, pady=5, sticky="ew")
 
     
                 altura = 25
                 largura = 80
-                btn_editar = RoundedButton(frame_tabela, text="Editar", command=lambda g_id=gasto_id: editar_gasto(g_id), radius=altura/2, bg="#4CAF50", hover_bg="#96DF96", fg="white", font=("Arial", 9, "bold"), width=largura, height=altura)
+                btn_editar = RoundedButton(self.frame_tabela, text="Editar", command=lambda g_id=gasto_id: editar_gasto(g_id), radius=altura/2, bg="#4CAF50", hover_bg="#96DF96", fg="white", font=("Arial", 9, "bold"), width=largura, height=altura)
                 btn_editar.grid(row=i, column=3, padx=5, pady=5, sticky="ew")
 
 
-                btn_remover = RoundedButton(frame_tabela, text="Remover", command=lambda g_id=gasto_id: remover_gasto(g_id), radius=altura/2, bg="#D9534F", hover_bg="#E08E8B", fg="white", font=("Arial", 9, "bold"), width=largura, height=altura)
+                btn_remover = RoundedButton(self.frame_tabela, text="Remover", command=lambda g_id=gasto_id: remover_gasto(g_id), radius=altura/2, bg="#D9534F", hover_bg="#E08E8B", fg="white", font=("Arial", 9, "bold"), width=largura, height=altura)
                 
                 btn_remover.grid(row=i, column=4, padx=5, pady=5, sticky="ew")
 
@@ -99,9 +124,7 @@ class EditarGastos(tk.Frame):
         btn_filtrar = RoundedButton(self.edit_window, text="Filtrar", command=carregar_gastos, radius=altura/2, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 12, "bold"), width=largura, height=altura)
         btn_filtrar.pack(pady=10)
 
-        # Frame para exibir a tabela de gastos
-        frame_tabela = tk.Frame(self.edit_window, bg="#ffffff")
-        frame_tabela.pack(fill="both", expand=True, padx=100, pady=(50,50))
+
 
         # Função para editar um gasto
         def editar_gasto(gasto_id):
@@ -109,20 +132,38 @@ class EditarGastos(tk.Frame):
                 nova_descricao = entry_editar_desc.get()
                 novo_valor = entry_editar_valor.get()
                 nova_data = entry_editar_data.get()
+                nova_data = nova_data.replace(" ", "")
+
+                if nova_descricao == "" or novo_valor == "" or nova_data == "":
+                    tk.messagebox.showinfo('Erro', 'Preencha todos os campos!')
+                    janela_edicao.focus_set()
+                    return
+
+                
+                try:
+                    # testar se o valor é um float
+                    novo_valor = float(novo_valor)
+                except ValueError:
+                    tk.messagebox.showinfo('Erro', 'Valor inválido! Insira um valor numérico.')
+                    janela_edicao.focus_set()  # Mantém o foco na janela de edição
 
                 # Validação do formato da data
                 try:
                     nova_data = datetime.datetime.strptime(nova_data, "%Y-%m-%d").date()
+
+                    
                 except ValueError:
                     print("Data inválida! Insira a data no formato YYYY-MM-DD.")
                     tk.messagebox.showinfo('Erro', 'Data inválida! Insira a data no formato YYYY-MM-DD.')
                     janela_edicao.focus_set()  # Mantém o foco na janela de edição
                     return
+            
+
+
                 try:
                     cursor = app.conn.cursor()
                     cursor.execute("UPDATE gastos SET categoria = ?, valor = ?, data = ? WHERE id_gasto = ?", (nova_descricao, float(novo_valor), nova_data, gasto_id))
                     app.conn.commit()
-                    cursor.close()
                     carregar_gastos()
                     janela_edicao.destroy()
                 except Exception as e:
@@ -139,7 +180,6 @@ class EditarGastos(tk.Frame):
             cursor = app.conn.cursor()
             cursor.execute(query)
             resultado = cursor.fetchone()
-            cursor.close()
 
 
 
@@ -179,7 +219,6 @@ class EditarGastos(tk.Frame):
                 cursor = app.conn.cursor()
                 cursor.execute("DELETE FROM gastos WHERE id_gasto = ?", (gasto_id,))
                 app.conn.commit()
-                cursor.close()
                 carregar_gastos()
             except Exception as e:
                 print(f"Erro ao remover gasto: {e}")

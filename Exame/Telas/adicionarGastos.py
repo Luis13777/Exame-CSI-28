@@ -44,6 +44,19 @@ class AdicionarGasto(tk.Frame):
             descricao = entry_desc.get()
             valor = entry_valor.get()
 
+            if valor == "" or descricao == "":
+                self.mensgemDeNaoConfirmacao = tk.Label(self.frame, text="Preencha todos os campos!", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="red")
+                self.mensgemDeNaoConfirmacao.pack(pady=10)
+                return
+            
+            # verifica se o valor é um número
+            try:
+                float(valor)
+            except:
+                self.mensgemDeNaoConfirmacao = tk.Label(self.frame, text="O valor deve ser um número!", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="red")
+                self.mensgemDeNaoConfirmacao.pack(pady=10)
+                return
+
             # Envia ao banco de dados
             try:
                 cursor = app.conn.cursor()

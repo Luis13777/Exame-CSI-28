@@ -60,12 +60,6 @@ class RegisterScreen(tk.Frame):
                 self.mensgem.pack(pady=10)
                 return
 
-            # Verifica se as senhas são iguais
-            if senha != confirmar_senha:
-                self.mensgem = tk.Label(self.frame, text="Senhas não conferem!", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="red")
-                self.mensgem.pack(pady=10)
-                return
-            
             # Verifica se o email é válido
             if "@" not in email or "." not in email or " " in email:
                 self.mensgem = tk.Label(self.frame, text="Email inválido!", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="red")
@@ -78,6 +72,12 @@ class RegisterScreen(tk.Frame):
             resultado = cursor.fetchall()
             if len(resultado) > 0:
                 self.mensgem = tk.Label(self.frame, text="Email já cadastrado!", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="red")
+                self.mensgem.pack(pady=10)
+                return
+            
+            # Verifica se as senhas são iguais
+            if senha != confirmar_senha:
+                self.mensgem = tk.Label(self.frame, text="Senhas não conferem!", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="red")
                 self.mensgem.pack(pady=10)
                 return
             
@@ -109,7 +109,6 @@ class RegisterScreen(tk.Frame):
 
     def gerar_nova_api_key(self):
         return "RPL2ZTY8XIPB5YFJ"
-    
     
 
     

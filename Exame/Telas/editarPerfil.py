@@ -80,6 +80,11 @@ class editarPerfil(tk.Frame):
             self.aviso.pack(pady=20)
             return
         
+        if "@" not in email or "." not in email or " " in email:
+            self.aviso = tk.Label(self.frame, text="Email inválido", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="red")
+            self.aviso.pack(pady=20)
+            return
+        
             
         query = f"UPDATE usuarios SET nome = '{nome}', email = '{email}', senha = '{senha}' WHERE email = '{self.app.usuario}'"
         cursor.execute(query)

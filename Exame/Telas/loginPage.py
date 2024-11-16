@@ -9,6 +9,8 @@ class LoginScreen(tk.Frame):
         tk.Frame.__init__(self, app.root, bg="#ffffff")
         self.app = app
 
+        self.aviso = None
+
         # Criando uma fonte personalizada
         self.title_font = font.Font(family="Helvetica", size=24, weight="bold")
         self.button_font = font.Font(family="Helvetica", size=12, weight="bold")
@@ -72,23 +74,33 @@ class LoginScreen(tk.Frame):
 
         return
 
+        if self.aviso:
+            self.aviso.destroy()
+
         username = self.entry_username.get()
         password = self.entry_password.get()
         # Se o login for bem-sucedido
 
+        if username == "" or password == "":
+            self.aviso = tk.Label(self.frame, text="Preencha todos os campos", font=("Arial", 12, "bold"), bg="#ffffff", fg="red")
+            self.aviso.pack(pady=10)
+            return
+        
         conn = self.app.conn
 
         resultado = consultar_usuarios(conn, username)
-        if resultado is not None:
+
+        if not resultado.empty:
             if resultado['senha'].values[0] == password:
                 self.app.usuario = username
-                self.app.show_frame(MainMenu)
+                self.app.show_frame("MainMenu")
             else:
-                messagebox.showerror("Erro", "Login falhou.")
+                self.aviso = tk.Label(self.frame, text="Email ou senha errada.", font=("Arial", 12, "bold"), bg="#ffffff", fg="red")
+                self.aviso.pack(pady=10)
         else:
-            messagebox.showerror("Erro", "Login falhou.")
+            self.aviso = tk.Label(self.frame, text="Email ou senha errada.", font=("Arial", 12, "bold"), bg="#ffffff", fg="red")
+            self.aviso.pack(pady=10)
 
-        conn.close()
 
 
 

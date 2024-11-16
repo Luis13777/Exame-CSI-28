@@ -25,8 +25,6 @@ class RemoverInvestimentos(tk.Frame):
 
         self.gerar_caixa_de_selecao()
 
-
-            
         criarBackButton(self, app)
     
     def get_simbolos(self):
@@ -37,7 +35,6 @@ class RemoverInvestimentos(tk.Frame):
         simbolos = []
         for simbolo in resultado:
             simbolos.append(simbolo[0])
-        cursor.close()
         return simbolos
     
     def remover_investimento(self):
@@ -50,18 +47,18 @@ class RemoverInvestimentos(tk.Frame):
             investimento_nome = self.simbolo_selecionado.get()
             cursor.execute(f"delete from investimentos where simbolo = '{investimento_nome}'")
             conn.commit()
-            cursor.close()
             
-
-            self.caixa_selecao.destroy()
-            self.botao_consultar.destroy()
-            self.gerar_caixa_de_selecao()
 
             # mensagem de sucesso
             self.mensgemDeConfirmacao = tk.Label(self.frame_acoes, text="Investimento removido com sucesso", bg="#f0f4f7", font=("Arial", 12, "bold"), fg="red")
 
 
             self.mensgemDeConfirmacao.pack(pady=10)
+            
+            self.caixa_selecao.destroy()
+            self.botao_consultar.destroy()
+            self.gerar_caixa_de_selecao()
+
 
         except:
             # mensagem de erro
@@ -70,7 +67,21 @@ class RemoverInvestimentos(tk.Frame):
             self.mensgemDeConfirmacao.pack(pady=10)
     
     def gerar_caixa_de_selecao(self):
+
+
+            
         simbolos = self.get_simbolos()
+        if simbolos == []:
+
+            if self.mensgemDeConfirmacao:
+                self.mensgemDeConfirmacao.destroy()
+
+
+            self.mensgemDeConfirmacao = tk.Label(self.frame_acoes, text="Nenhum investimento encontrado", bg="#ffffff", font=("Arial", 12, "bold"), fg="red")
+            self.mensgemDeConfirmacao.pack(pady=10, expand=True, fill="both")
+
+            return
+
 
         # Criação da caixa de seleção para escolher um símbolo
         self.simbolo_selecionado = tk.StringVar(self.frame_acoes)

@@ -108,7 +108,6 @@ class MainMenu(tk.Frame):
         cursor = self.conn.cursor()
         cursor.execute(query)
         usuario_id = cursor.fetchone()[0]
-        cursor.close()
         return usuario_id
 
     def adicionar_gasto(self):

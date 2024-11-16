@@ -67,9 +67,32 @@ class consultarGastos(tk.Frame):
         if self.canvas_widget:
             self.canvas_widget.destroy()
             self.canvas_widget = None
+
+        if self.label_no_data:
+            self.label_no_data.destroy()
+            self.label_no_data = None
+
         """Cria o gráfico de gastos com base nos dados do usuário"""
         data_inicial = self.entry_data_inicial.get()
         data_final = self.entry_data_final.get()
+
+        # COLOCAR TRATIVA DE ERRO DE INPUT AQUI
+        if not data_inicial or not data_final:
+            self.label_no_data = tk.Label(self.frame_data, text="Por favor, preencha as datas de início e fim.", bg="#f0f4f7", font=("Arial", 12))
+            self.label_no_data.grid(row=5, column=0, columnspan=5)  # Usando grid ao invés de pack
+            return
+        
+
+        
+        # CASO AS DATAS NÃO SEJAM VÁLIDAS
+        try:
+            datetime.datetime.strptime(data_inicial, "%Y-%m-%d")
+            datetime.datetime.strptime(data_final, "%Y-%m-%d")
+        except ValueError:
+            self.label_no_data = tk.Label(self.frame_data, text="Datas inválidas. Por favor, preencha no formato YYYY-MM-DD.", bg="#f0f4f7", font=("Arial", 12))
+            self.label_no_data.grid(row=5, column=0, columnspan=5)  # Usando grid ao invés de pack
+            return
+
 
         # gastos = self.fetch_gastos_data()
 
@@ -128,5 +151,4 @@ class consultarGastos(tk.Frame):
         else:
             data = pd.DataFrame(columns=['categoria', 'valor', 'data'])
 
-        cursor.close()
         return data
