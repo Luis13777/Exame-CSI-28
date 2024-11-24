@@ -3,23 +3,42 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 from BancoDeDados import *
 from Elementos.botoes import *
+from PIL import ImageTk, Image  
 
 class MainMenu(tk.Frame):
     def __init__(self, app):
-        tk.Frame.__init__(self, app.root, bg="#ffffff")
+
+        tk.Frame.__init__(self, app.root, bg="#e3e3e3")
         self.app = app
         self.conn = self.app.conn
         
-        app.root.geometry("900x700")
+        app.root.geometry("700x480")        
+
+        
+        imagem = Image.open("C:\\Users\\death\\OneDrive\\Documentos\\GitHub\\Exame-CSI-28\\Exame\\Telas\\Imagens\\menu6.jpg", mode="r")
+        imagem = imagem.resize((int(6001 / 8), int(4000 / 12)))
+        imagem = ImageTk.PhotoImage(imagem)
+        frame = tk.Label(self, image=imagem)
+        frame.image = imagem
+        frame.place(x=0, y=0)
 
         # Título
-        label_title = tk.Label(self, text=f"Bem vindo {self.get_usuario_id()}", font=("Arial", 24, "bold"), bg="#ffffff")
+        label_title = tk.Label(self, text=f"Bem vindo {self.get_usuario_id()}", font=("Archivo", 24, "bold"), bg="#051357", fg="#ffffff", bd=0)
         label_title.pack(pady=20)
         self.label_title = label_title
 
         # Frame para os botões de opções
-        self.options_frame = tk.Frame(self, bg="#ffffff")
+        self.options_frame = tk.Frame(self, bg="#ffffff", bd=0)
         self.options_frame.pack(fill="both", expand=True)
+
+        """
+        imagem = Image.open("C:\\Users\\death\\OneDrive\\Documentos\\GitHub\\Exame-CSI-28\\Exame\\Telas\\Imagens\\main_img3.png", mode="r")
+        imagem = imagem.resize((700, 400))
+        imagem = ImageTk.PhotoImage(imagem)
+        frame = tk.Label(self.options_frame, image=imagem)
+        frame.image = imagem
+        frame.place(x=0, y=0)
+        """
 
         # Botões de opções
         self.create_option_buttons()
@@ -30,21 +49,36 @@ class MainMenu(tk.Frame):
         self.create_sidebar()
 
         # Botão que alterna o menu lateral
-        self.toggle_btn = tk.Button(self, text="☰", command=self.toggle_sidebar, bg="#333", fg="white", padx=10, pady=5, font=("Arial", 16))
+        self.toggle_btn = tk.Button(self, text="☰", command=self.toggle_sidebar, bg="#601E88", fg="white", padx=10, pady=5, font=("Arial", 16), bd=0)
         self.toggle_btn.place(x=10, y=10)
 
     def create_sidebar(self):
+
         # Criar um frame para o menu lateral que cobre toda a altura da tela
-        self.sidebar = tk.Frame(self, bg="#333", width=200)
+        self.sidebar = tk.Frame(self, bg="#601E88", width=200, bd=0)
         self.sidebar.place(x=-200, y=0, relheight=1)  # Define a altura relativa a 100% da janela
 
-        self.box_de_botoes = tk.Frame(self.sidebar, bg="#333")
+        imagem = Image.open("C:\\Users\\death\\OneDrive\\Documentos\\GitHub\\Exame-CSI-28\\Exame\\Telas\\Imagens\\side_img.png", mode="r")
+        imagem = imagem.resize((300, 480))
+        imagem = ImageTk.PhotoImage(imagem)
+        frame = tk.Label(self.sidebar, image=imagem)
+        frame.image = imagem
+        frame.place(x=0, y=0)
+        
+        self.box_de_botoes = tk.Frame(self.sidebar, bg="#601E88")
         self.box_de_botoes.pack(fill="x", expand=False, pady=75)
 
+        imagem = Image.open("C:\\Users\\death\\OneDrive\\Documentos\\GitHub\\Exame-CSI-28\\Exame\\Telas\\Imagens\\side_img.png", mode="r")
+        imagem = imagem.resize((300, 480))
+        imagem = ImageTk.PhotoImage(imagem)
+        frame = tk.Label(self.box_de_botoes, image=imagem)
+        frame.image = imagem
+        frame.place(x=0, y=-75)
+
         # Adicionar botões no menu lateral com mais espaçamento
-        self.btn_logout = tk.Button(self.box_de_botoes, text="Logout", command=self.logout, bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
+        self.btn_logout = tk.Button(self.box_de_botoes, text="Logout", command=self.logout, bg="#601E88", fg="white", font=("Archivo", 12), padx=10, pady=10, bd=0)
         
-        self.editar_perfil = tk.Button(self.box_de_botoes, text="Editar Perfil", command=self.editar_perfil, bg="#444", fg="white", font=("Arial", 12), padx=10, pady=10)
+        self.editar_perfil = tk.Button(self.box_de_botoes, text="Editar Perfil", command=self.editar_perfil, bg="#601E88", fg="white", font=("Archivo", 12), padx=10, pady=10, bd=0)
 
         self.editar_perfil.pack(fill="x", pady=10, padx=20)
         self.btn_logout.pack(fill="x", pady=10, padx=20)
@@ -53,17 +87,17 @@ class MainMenu(tk.Frame):
 
         largura = 300
 
-        btn_consultar = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_consultar = RoundedButton(self.options_frame, text="Consultar Gastos", command=self.show_chart, radius=20, bg="#601E88", hover_bg="#6666ff", fg="white", font=("Archivo", 14, "bold"), width=largura, height=60)
 
-        btn_adicionar_gastos = RoundedButton(self.options_frame, text="Adicionar Gastos", command=self.adicionar_gasto, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_adicionar_gastos = RoundedButton(self.options_frame, text="Adicionar Gastos", command=self.adicionar_gasto, radius=20, bg="#601E88", hover_bg="#6666ff", fg="white", font=("Archivo", 14, "bold"), width=largura, height=60)
 
-        btn_editar_gastos = RoundedButton(self.options_frame, text="Editar Gastos", command=self.editar_remover_gasto, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_editar_gastos = RoundedButton(self.options_frame, text="Editar Gastos", command=self.editar_remover_gasto, radius=20, bg="#601E88", hover_bg="#6666ff", fg="white", font=("Archivo", 14, "bold"), width=largura, height=60)
 
-        btn_consultar_investimentos = RoundedButton(self.options_frame, text="Consultar Investimentos", command=self.investimentos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_consultar_investimentos = RoundedButton(self.options_frame, text="Consultar Investimentos", command=self.investimentos, radius=20, bg="#601E88", hover_bg="#6666ff", fg="white", font=("Archivo", 14, "bold"), width=largura, height=60)
 
-        btn_adicionar_investimentos = RoundedButton(self.options_frame, text="Adicionar Investimentos", command=self.add_investimentos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_adicionar_investimentos = RoundedButton(self.options_frame, text="Adicionar Investimentos", command=self.add_investimentos, radius=20, bg="#601E88", hover_bg="#6666ff", fg="white", font=("Archivo", 14, "bold"), width=largura, height=60)
 
-        btn_remover_investimentos = RoundedButton(self.options_frame, text="Remover Investimentos", command=self.remover_investimentos, radius=20, bg="#3333cc", hover_bg="#6666ff", fg="white", font=("Arial", 14, "bold"), width=largura, height=60)
+        btn_remover_investimentos = RoundedButton(self.options_frame, text="Remover Investimentos", command=self.remover_investimentos, radius=20, bg="#601E88", hover_bg="#6666ff", fg="white", font=("Archivo", 14, "bold"), width=largura, height=60)
         
     
         # Usando grid para que os botões ocupem o espaço disponível

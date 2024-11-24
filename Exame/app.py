@@ -16,8 +16,8 @@ class App:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("App de Finanças")
-        self.root.geometry("900x700")
-        
+        self.root.geometry("700x480")
+
         # Iniciar com a tela de login
         self.current_frame = None
         self.usuario = None

@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, font
 from BancoDeDados import *
-
+from PIL import ImageTk, Image  
 
 
 class LoginScreen(tk.Frame):
@@ -11,34 +11,41 @@ class LoginScreen(tk.Frame):
 
         self.aviso = None
 
+        # Imagem de fundo
+        # 300 x 480 pixels
+        imagem = Image.open("C:\\Users\\death\\OneDrive\\Documentos\\GitHub\\Exame-CSI-28\\Exame\\Telas\\Imagens\\side_img.png", mode="r")
+        imagem = imagem.resize((300, 480))
+        imagem = ImageTk.PhotoImage(imagem)
+        frame = tk.Label(self.app.root, image=imagem)
+        frame.image = imagem
+        frame.place(x=0, y=0)
+
         # Criando uma fonte personalizada
-        self.title_font = font.Font(family="Helvetica", size=24, weight="bold")
-        self.button_font = font.Font(family="Helvetica", size=12, weight="bold")
-
-
+        self.title_font = font.Font(family="Archivo", size=24, weight="bold")
+        self.button_font = font.Font(family="Archivo", size=12, weight="bold")
         
         # Frame para a centralização dos elementos
         self.frame = tk.Frame(self, bg="#ffffff", padx=20, pady=20, relief="flat", bd=2)
-        self.frame.place(relx=0.5, rely=0.5, anchor="center")
+        self.frame.place(relx=0.72, rely=0.5, anchor="center")
 
         # Título estilizado
-        label_title = tk.Label(self.frame, text="Login", font=self.title_font, bg="#ffffff", fg="#333333")
+        label_title = tk.Label(self.frame, text="Login", font=self.title_font, bg="#ffffff", fg="#601E88")
         label_title.pack(pady=20)
 
         # Caixa de texto para o nome de usuário
-        self.entry_username = tk.Entry(self.frame, bg="#f0f0f0", fg="#333333", font=("Arial", 12, "bold"), bd=5, relief="flat")
+        self.entry_username = tk.Entry(self.frame, bg="#e3e3e3", fg="#601E88", font=("Archivo", 12, "bold"), bd=5, relief="flat")
         self.entry_username.pack(pady=10, ipadx=5, ipady=5, fill="x")
         self.entry_username.insert(0, "Email")
 
 
         # Caixa de texto para a senha
-        self.entry_password = tk.Entry(self.frame, show="*", bg="#f0f0f0", fg="#333333", font=("Arial", 12, "bold"), bd=5, relief="flat")
+        self.entry_password = tk.Entry(self.frame, show="*", bg="#e3e3e3", fg="#601E88", font=("Archivo", 12, "bold"), bd=5, relief="flat")
         self.entry_password.pack(pady=10, ipadx=5, ipady=5, fill="x")
         self.entry_password.insert(0, "Senha")
 
         # Botão estilizado com efeito de hover
-        self.btn_login = tk.Button(self.frame, text="Entrar", font=self.button_font, bg="#3333cc", fg="#ffffff",
-                                   activebackground="#6666ff", activeforeground="#ffffff", bd=0, padx=10, pady=10,
+        self.btn_login = tk.Button(self.frame, text="Entrar", font=self.button_font, bg="#601E88", fg="#ffffff",
+                                   activebackground="#c9c9c9", activeforeground="#ffffff", bd=0, padx=10, pady=10,
                                    relief="flat", cursor="hand2", command=self.login)
         self.btn_login.pack(pady=20, ipadx=50, ipady=5)
 
@@ -65,7 +72,7 @@ class LoginScreen(tk.Frame):
         event.widget['background'] = '#6666ff'  # Cor ao passar o mouse
 
     def on_leave(self, event):
-        event.widget['background'] = '#3333cc'  # Cor normal do botão
+        event.widget['background'] = '#601E88'  # Cor normal do botão
 
     def login(self):
 
@@ -100,7 +107,6 @@ class LoginScreen(tk.Frame):
         else:
             self.aviso = tk.Label(self.frame, text="Email ou senha errada.", font=("Arial", 12, "bold"), bg="#ffffff", fg="red")
             self.aviso.pack(pady=10)
-
 
 
 

@@ -12,6 +12,7 @@ def conectar_ao_sql_server():
     database = os.getenv('DATABASE_NAME')
     
     conn_str = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
+    print(conn_str)
 
     try:
         # Tentando estabelecer a conexão
